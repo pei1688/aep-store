@@ -16,7 +16,7 @@ const eslintConfig = [
   ),
   {
     rules: {
-      "no-unused-vars": "warn",
+      "no-unused-vars": "off",
     },
   },
 ];
