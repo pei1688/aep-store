@@ -3,7 +3,6 @@
 import Spinner from "@/components/spinner";
 import useSearch from "@/hooks/use-search";
 import ProductItem from "@/modules/product/components/product-item";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,8 +14,6 @@ const SearchContent = () => {
   useEffect(() => {
     if (query) {
       setSearchQuery(query);
-      console.log("搜尋關鍵字:", query);
-      // 使用防抖來避免頻繁搜尋
       const timeoutId = setTimeout(() => {
         search(query);
       }, 300);

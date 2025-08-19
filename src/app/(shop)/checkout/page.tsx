@@ -1,5 +1,6 @@
 import { getUserProfile } from "@/action/user/get";
-import CheckOutContent from "@/app/modules/checkout/ui/views/check-out-content";
+import CheckOutContent from "@/modules/checkout/ui/views/check-out-content";
+
 
 const CheckOutPage = async () => {
   const profile = await getUserProfile();
