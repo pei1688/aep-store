@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,17 +24,7 @@ export default function CheckoutSuccessPage() {
   const orderId = searchParams.get("orderId");
   const sessionId = searchParams.get("session_id");
 
-  useEffect(() => {
-    if (!orderId) {
-      setError("找不到訂單資訊");
-      setLoading(false);
-      return;
-    }
-
-    fetchOrderDetails();
-  }, [orderId, sessionId]);
-
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = useCallback(async () => {
     try {
       const response = await fetch(`/api/orders/${orderId}`);
 
@@ -49,7 +39,17 @@ export default function CheckoutSuccessPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId]);
+
+  useEffect(() => {
+    if (!orderId) {
+      setError("找不到訂單資訊");
+      setLoading(false);
+      return;
+    }
+
+    fetchOrderDetails();
+  }, [sessionId, fetchOrderDetails, orderId]);
 
   if (loading) {
     return (
@@ -134,13 +134,17 @@ export default function CheckoutSuccessPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <h4 className="mb-2 font-semibold text-neutral-900">收貨資訊</h4>
+                  <h4 className="mb-2 font-semibold text-neutral-900">
+                    收貨資訊
+                  </h4>
                   <p className="text-neutral-600">收貨人：{order.name}</p>
                   <p className="text-neutral-600">電話：{order.phoneNumber}</p>
                   <p className="text-neutral-600">地址：{order.address}</p>
                 </div>
                 <div>
-                  <h4 className="mb-2 font-semibold text-neutral-900">付款資訊</h4>
+                  <h4 className="mb-2 font-semibold text-neutral-900">
+                    付款資訊
+                  </h4>
                   <p className="text-neutral-600">
                     付款方式：
                     {order.paymentMethod === "cod" ? "取貨付款" : "線上付款"}

@@ -77,7 +77,7 @@ export default function CategoryPageContent({
     }
 
     return filtered;
-  }, [safeProducts, searchParams, decoded, isAll, sortBy]);
+  }, [safeProducts, searchParams, decoded, isAll]);
 
   // 修復：使用 collection.name 而不是 collection.slug
   const collectionName =
@@ -105,14 +105,6 @@ export default function CategoryPageContent({
       </div>
     );
   }
-
-  console.log("Debug breadcrumb data:", {
-    collectionName,
-    selectedBrand,
-    parentPageName,
-    displayName,
-    searchParams: searchParams.toString(),
-  });
 
   return (
     <div className="mx-auto mt-16 min-h-screen max-w-7xl space-y-6 px-6 md:mt-32 md:px-0">

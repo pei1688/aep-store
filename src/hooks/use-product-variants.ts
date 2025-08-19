@@ -16,7 +16,7 @@ export const useProductVariants = (product: ProductDetailProps["product"]) => {
         {} as Record<string, typeof product.variants>,
       ) || {}
     );
-  }, [product.variants]);
+  }, [product]);
 
   return { groupedVariants };
 };

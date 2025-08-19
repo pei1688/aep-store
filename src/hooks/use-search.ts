@@ -1,13 +1,13 @@
 "use client";
 
 import { getProductFormSearch, searchResult } from "@/action/search/get";
-import { useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 
 const useSearch = () => {
   const [results, setResults] = useState<searchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const search = (query: string) => {
+  const search = useCallback((query: string) => {
     if (!query || query.trim() === "") {
       setResults(null);
       return;
@@ -22,7 +22,7 @@ const useSearch = () => {
         setResults(null);
       }
     });
-  };
+  }, []);
 
   return { results, error, isPending, search };
 };
