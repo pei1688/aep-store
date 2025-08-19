@@ -1,6 +1,5 @@
 "use client";
 import { getProduct } from "@/action/product";
-import Spinner from "@/components/spinner";
 import ProductDialogContent from "./product-dialog-content";
 import { useQuery } from "@tanstack/react-query";
 
@@ -15,7 +14,7 @@ const ProductDialogItem = ({ id }: { id: string }) => {
   });
 
   if (isPending) {
-    return <Spinner />;
+    return null;
   }
 
   if (error) {

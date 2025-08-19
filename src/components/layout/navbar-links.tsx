@@ -10,6 +10,7 @@ import NavbarCart from "./navbar-cart";
 import MobileNavMenu from "./mobile/navbar-moblie";
 import { CollectionWithCategory } from "@/types/collections";
 import NavbarSearch from "./navbar-search";
+import MobileCart from "./mobile/mobile-cart";
 
 interface NavLinksProps {
   collections: CollectionWithCategory[];
@@ -52,16 +53,16 @@ export const NavLinks = ({ collections }: NavLinksProps) => {
             <NavigationMenuItem className="">
               <NavbarUser />
             </NavigationMenuItem>
-            {/* 購物車下拉選單 */}
             <NavbarCart />
           </NavigationMenuList>
         </NavigationMenu>
       </nav>
 
       {/* 手機版選單按鈕 */}
-      <div className="flex items-center">
-        <div className="flex sm:hidden">
+      <div className="flex items-center gap-4">
+        <div className="flex md:hidden gap-4">
           <NavbarSearch />
+          <MobileCart />
         </div>
         <MobileNavMenu collections={collections} />
       </div>

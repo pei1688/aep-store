@@ -7,7 +7,7 @@ import Footer from "@/components/layout/footer";
 import ReactQueryProvider from "@/providers/react-query-provider";
 
 export const metadata: Metadata = {
-  title: "茄蘋帝國",
+  title: "AEp-Store",
   description: "代購，電商，海外代購",
 };
 

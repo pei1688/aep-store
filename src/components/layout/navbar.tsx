@@ -11,17 +11,14 @@ const Navbar = async () => {
     <header className="z-50 flex w-full items-center justify-between bg-[#FAFAFCCC] shadow-sm">
       <div className="container mx-auto max-w-7xl px-4 lg:px-0">
         <div className="flex h-16 items-center justify-between">
-          <Link
-            href={"/"}
-            className="flex cursor-pointer items-center gap-4 text-2xl font-semibold"
-          >
+          <Link href={"/"} className="flex cursor-pointer items-center gap-4">
             <Image
               src={"/logo.png"}
               alt="茄蘋帝國Logo"
               width={30}
               height={30}
             />
-            AEp Store
+            <p className="hidden text-2xl font-semibold md:flex">AEp Store</p>
           </Link>
 
           {/* 搜尋功能 */}
