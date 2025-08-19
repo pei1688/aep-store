@@ -45,7 +45,7 @@ const MobileCart = () => {
     <Sheet open={open} onOpenChange={setOpen}>
       {/* trigger = 購物車 icon */}
       <SheetTrigger asChild>
-        <Button className="relative bg-transparent ">
+        <Button className="relative bg-transparent shadow-transparent px-3 py-1" size={'none'}>
           <ShoppingCart className="size-5 text-neutral-800" />
           {totalItems > 0 && (
             <span className="absolute -top-0 -right-0 flex size-4 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-fuchsia-50">
