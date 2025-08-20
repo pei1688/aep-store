@@ -1,5 +1,5 @@
+import { getProductsByCollectionId } from "@/action/product";
 import CategoryPageContent from "@/modules/collection/ui/views/category-content";
-
 
 interface Props {
   params: Promise<{ collectionId: string; categorySlug: string }>;
@@ -14,13 +14,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const { collectionId, categorySlug } = resolvedParams;
   const brandFilter = resolvedSearchParams.brand ?? null;
   const sortBy = resolvedSearchParams.sortBy ?? "newest";
-
+  const initialData = await getProductsByCollectionId(collectionId);
   return (
     <CategoryPageContent
       collectionId={collectionId}
       categorySlug={categorySlug}
       brandFilter={brandFilter}
       sortBy={sortBy}
+      initialData={initialData}
     />
   );
 }

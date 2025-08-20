@@ -1,8 +1,5 @@
 "use client";
 import PageBreadcrumb from "@/components/layout/page-breadcrumb";
-import { getProductsByCollectionId } from "@/action/product";
-
-import { useQuery } from "@tanstack/react-query";
 import Spinner from "@/components/spinner";
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
@@ -10,12 +7,17 @@ import MobileFilterSidebar from "../../components/mobile-filter-sidebar";
 import FilterSidebar from "../../components/filter-sidebar";
 import SortSelector from "../../components/sort-selector";
 import CategoryProducts from "../../components/category-products";
+import {
+  GetProductsByCollectionIdResult,
+  useAllProductsByCollectionId,
+} from "@/services/products";
 
 interface CategoryPageContentProps {
   collectionId: string;
   categorySlug: string;
   brandFilter: string | null;
   sortBy: string;
+  initialData: GetProductsByCollectionIdResult;
 }
 
 export default function CategoryPageContent({
@@ -23,15 +25,12 @@ export default function CategoryPageContent({
   categorySlug,
   brandFilter,
   sortBy,
+  initialData,
 }: CategoryPageContentProps) {
   const searchParams = useSearchParams();
-  const {
-    data: allProducts,
-    isError,
-    isPending,
-  } = useQuery({
-    queryKey: ["allProducts", collectionId],
-    queryFn: () => getProductsByCollectionId(collectionId),
+  const { allProducts, isError, isPending } = useAllProductsByCollectionId({
+    collectionId,
+    initialData,
   });
 
   const decoded = decodeURIComponent(categorySlug);
