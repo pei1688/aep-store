@@ -20,7 +20,7 @@ const ProductList = async () => {
       </div>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {collection.productCollections.map((pc) => (
-          <ProductItem pc={pc.product} key={pc.id} />
+          <ProductItem product={pc.product} key={pc.id} />
         ))}
       </div>
     </section>

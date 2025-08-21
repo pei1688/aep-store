@@ -8,7 +8,6 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ product }: ProductItemProps) => {
- 
   return (
     <div
       key={product.id}

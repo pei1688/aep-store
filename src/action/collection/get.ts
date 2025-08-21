@@ -9,9 +9,15 @@ export async function getCollectionById(collectionId: string) {
       include: {
         productCollections: {
           include: {
+            collection: true,
             product: {
               include: {
                 category: true,
+                variants: {
+                  include: {
+                    spec2Combinations: true,
+                  },
+                },
               },
             },
           },
@@ -54,7 +60,6 @@ export async function getCollections() {
     return [];
   }
 }
-
 
 export async function getCollectionsWithCategory() {
   try {

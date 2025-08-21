@@ -1,4 +1,11 @@
-import { Category, Collection, Product, ProductVariant } from "@prisma/client";
+import { getProductFormSearch } from "@/action/search/get";
+import {
+  Category,
+  Collection,
+  Prisma,
+  Product,
+  ProductVariant,
+} from "@prisma/client";
 
 // ProductWithCategory
 export type ProductWithCategory = Product & {

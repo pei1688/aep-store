@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Product } from "@prisma/client";
+import { Product, Category } from "@prisma/client";
 
 export interface searchParams {
   query?: string;
@@ -10,8 +10,14 @@ export interface searchParams {
   page?: number;
   limit?: number;
 }
+
+// 定義包含 category 關聯的產品類型
+export interface ProductWithCategory extends Product {
+  category: Category;
+}
+
 export interface searchResult {
-  products: Product[];
+  products: ProductWithCategory[];
   total: number;
   page: number;
   totalPages: number;
@@ -31,7 +37,7 @@ export const getProductFormSearch = async (
       limit = 20,
     } = searchParams;
     const skip = (page - 1) * limit;
-    //是否有上架
+
     const whereConditions: any = {};
 
     if (query && query.trim()) {
@@ -58,6 +64,7 @@ export const getProductFormSearch = async (
         },
       ];
     }
+
     const products = await prisma.product.findMany({
       where: whereConditions,
       include: {
@@ -75,7 +82,7 @@ export const getProductFormSearch = async (
     });
 
     return {
-      products,
+      products, // 現在類型匹配了
       total,
       page,
       totalPages: Math.ceil(total / limit),
