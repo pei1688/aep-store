@@ -12,26 +12,6 @@ export async function getProducts() {
   }
 }
 
-export async function getProduct(productId: string) {
-  try {
-    const product = await prisma.product.findUnique({
-      where: { id: productId },
-      include: {
-        category: true,
-        variants: {
-          include: {
-            spec2Combinations: true,
-          },
-        },
-      },
-    });
-
-    return product;
-  } catch (error) {
-    console.log("商品獲取錯誤", error);
-  }
-}
-
 //獲取相關的分類隨機商品
 export async function getRelatedProducts(
   categoryId: string,
@@ -56,9 +36,37 @@ export async function getRelatedProducts(
     },
     skip: skip,
     take: limit,
+    include: {
+      category: true,
+      variants: {
+        include: {
+          spec2Combinations: true,
+        },
+      },
+    },
   });
 
   return related;
+}
+
+export async function getProduct(productId: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      include: {
+        category: true,
+        variants: {
+          include: {
+            spec2Combinations: true,
+          },
+        },
+      },
+    });
+
+    return product;
+  } catch (error) {
+    console.log("商品獲取錯誤", error);
+  }
 }
 
 export async function getProductsByCollectionId(collectionId: string) {
@@ -71,6 +79,11 @@ export async function getProductsByCollectionId(collectionId: string) {
           product: {
             include: {
               category: true,
+              variants: {
+                include: {
+                  spec2Combinations: true,
+                },
+              },
             },
           },
         },

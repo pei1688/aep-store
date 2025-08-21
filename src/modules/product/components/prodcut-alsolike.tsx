@@ -1,5 +1,3 @@
-import { getRelatedProducts } from "@/action/product";
-import { useQuery } from "@tanstack/react-query";
 import ProductItem from "./product-item";
 import {
   Carousel,
@@ -8,22 +6,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-interface ProductAlsoLikeProps {
-  categoryId: string;
-  productId: string;
-}
+import { useRelatedProducts } from "@/services/products";
+import { RelatedProductProps } from "@/types/product/product";
 
-const ProductAlsoLike = ({ categoryId, productId }: ProductAlsoLikeProps) => {
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ["relatedProducts", categoryId, productId],
-    queryFn: () => getRelatedProducts(categoryId, productId),
+const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
+  const { products, error, isPending } = useRelatedProducts({
+    categoryId,
+    productId,
   });
 
-  if (isLoading) {
+  if (isPending) {
     return <div>載入推薦商品中...</div>;
   }
 
@@ -44,7 +36,7 @@ const ProductAlsoLike = ({ categoryId, productId }: ProductAlsoLikeProps) => {
             key={pd.id}
             className="max-w-xs basis-full sm:basis-1/2 lg:basis-1/3"
           >
-            <ProductItem pc={pd} />
+            <ProductItem product={pd} />
           </CarouselItem>
         ))}
       </CarouselContent>

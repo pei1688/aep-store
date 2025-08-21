@@ -68,11 +68,11 @@ const MobileCart = () => {
             <span className="text-neutral-500">尚未有商品</span>
           </div>
         ) : (
-          <div className="max-h-[70vh] space-y-4 overflow-y-auto pr-2">
+          <div className="max-h-[70vh] space-y-4 overflow-y-auto pr-2 rounded-lg border">
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center space-x-3 rounded-lg border p-3"
+                className="flex items-center space-x-3  p-3"
               >
                 <Link
                   href={`/product/${item.id.split("_")[0]}`}

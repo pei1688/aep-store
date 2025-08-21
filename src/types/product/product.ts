@@ -16,3 +16,8 @@ export interface CartItem {
   stock: number;
   variantText?: string;
 }
+
+export interface RelatedProductProps {
+  categoryId: string;
+  productId: string;
+}

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { ProductWithCategory } from "@/types/product/product";
 import ProductItem from "@/modules/product/components/product-item";
+import { sortProducts } from "@/lib/filter";
 
 interface CategoryProductsProps {
   allProducts: ProductWithCategory[];
@@ -19,40 +20,15 @@ export default function CategoryProducts({
   sortBy,
   isFetching = false,
 }: CategoryProductsProps) {
-  const filteredAndSortedProducts = useMemo(() => {
+  const sortedProducts = useMemo(() => {
     const isAll = category === "全部";
-
-    // 篩選
     const filtered = allProducts.filter((prod) => {
       const catMatch = isAll || prod.category.name === category;
       const brandMatch = !brandFilter || prod.brand === brandFilter;
       return catMatch && brandMatch;
     });
 
-    // 排序
-    return [...filtered].sort((a, b) => {
-      switch (sortBy) {
-        case "price-low":
-          return (a.price || 0) - (b.price || 0);
-        case "price-high":
-          return (b.price || 0) - (a.price || 0);
-        case "name-asc":
-          return (a.name || "").localeCompare(b.name || "", "zh-TW");
-        case "name-desc":
-          return (b.name || "").localeCompare(a.name || "", "zh-TW");
-        case "oldest":
-          return (
-            new Date(a.createdAt || 0).getTime() -
-            new Date(b.createdAt || 0).getTime()
-          );
-        case "newest":
-        default:
-          return (
-            new Date(b.createdAt || 0).getTime() -
-            new Date(a.createdAt || 0).getTime()
-          );
-      }
-    });
+    return sortProducts(filtered, sortBy);
   }, [allProducts, category, brandFilter, sortBy]);
 
   return (
@@ -63,10 +39,10 @@ export default function CategoryProducts({
             isFetching ? "pointer-events-none opacity-75" : "opacity-100"
           }`}
         >
-          {filteredAndSortedProducts.length > 0 ? (
+          {sortedProducts.length > 0 ? (
             <div className="grid grid-cols-2 justify-items-center gap-4 md:grid-cols-3">
-              {filteredAndSortedProducts.map((product) => (
-                <ProductItem key={product.id} pc={product} />
+              {sortedProducts.map((product) => (
+                <ProductItem key={`product-${product.id}`} product={product} />
               ))}
             </div>
           ) : (

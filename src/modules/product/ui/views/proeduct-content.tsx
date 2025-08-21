@@ -7,19 +7,23 @@ import ProductAlsoLike from "../../components/prodcut-alsolike";
 import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "@/action/product";
 import Spinner from "@/components/spinner";
+import { Prisma } from "@prisma/client";
 
-interface ProductViewProps {
-  slug: string;
+export type GetProducts = Prisma.PromiseReturnType<typeof getProduct>;
+interface ProductContentProps {
+  productId: string;
+  initialData?: GetProducts;
 }
 
-const ProductContent = ({ slug }: ProductViewProps) => {
+const ProductContent = ({ productId, initialData }: ProductContentProps) => {
   const {
     data: product,
     error,
     isPending,
   } = useQuery({
-    queryKey: ["product", slug],
-    queryFn: () => getProduct(slug),
+    queryKey: ["product", productId],
+    queryFn: () => getProduct(productId),
+    initialData,
   });
 
   if (isPending) {

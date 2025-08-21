@@ -11,6 +11,7 @@ import {
   GetProductsByCollectionIdResult,
   useAllProductsByCollectionId,
 } from "@/services/products";
+import { createProductFilters } from "@/lib/filter";
 
 interface CategoryPageContentProps {
   collectionId: string;
@@ -32,13 +33,11 @@ export default function CategoryPageContent({
     collectionId,
     initialData,
   });
-
-  const decoded = decodeURIComponent(categorySlug);
-  const isAll = decoded === "全部";
-
-  // 優先使用 URL 參數中的 categories，如果沒有則使用 categorySlug
+  //過濾
+  const filters = createProductFilters(searchParams, categorySlug);
   const selectedCategory = searchParams.get("categories");
-  const displayName = selectedCategory || (isAll ? "全部" : decoded);
+  const displayName =
+    selectedCategory || (filters.isAll ? "全部" : filters.decoded);
 
   const safeProducts = (allProducts?.productCollections || []).map((pc) => ({
     ...pc.product,
@@ -50,35 +49,12 @@ export default function CategoryPageContent({
   const filteredProducts = useMemo(() => {
     if (!safeProducts.length) return [];
 
-    let filtered = [...safeProducts];
+    return safeProducts.filter(
+      (product) =>
+        filters.filterByCategory(product) && filters.filterByBrand(product),
+    );
+  }, [safeProducts, filters]);
 
-    // 獲取分類過濾條件
-    const selectedCategories = searchParams.get("categories")?.split(",") || [];
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedCategories.includes(product.category.name),
-      );
-    }
-
-    // 獲取品牌過濾條件
-    const selectedBrands = searchParams.get("brands")?.split(",") || [];
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(
-        (product) => product.brand && selectedBrands.includes(product.brand),
-      );
-    }
-
-    // 如果不是 "全部" 分類，還需要按照當前分類過濾
-    if (!isAll) {
-      filtered = filtered.filter(
-        (product) => product.category.name === decoded,
-      );
-    }
-
-    return filtered;
-  }, [safeProducts, searchParams, decoded, isAll]);
-
-  // 修復：使用 collection.name 而不是 collection.slug
   const collectionName =
     allProducts?.productCollections?.[0]?.collection.name ??
     allProducts?.productCollections?.[0]?.collection.slug ??

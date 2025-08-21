@@ -178,7 +178,7 @@ const ProductDialogContent = ({ product }: ProductDetailProps) => {
       <DialogTrigger className="cursor-pointer">
         <ShoppingCart className="size-6 text-neutral-800 hover:text-neutral-600" />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="overflow-y-auto max-h-[100vh]">
         <div className="flex flex-col items-center justify-center gap-4 md:flex-grow">
           <div className="relative h-64 w-full">
             <Image
