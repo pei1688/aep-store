@@ -1,15 +1,21 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { Profile } from "@prisma/client";
-import UpdateUserForm from "../../components/update-user-form";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "@/action/user";
 import Spinner from "@/components/spinner";
+import dynamic from "next/dynamic";
 
 export interface UserProfileProps {
   profile: Profile | null;
 }
-
+const UpdateUserForm = dynamic(
+  () => import("../../components/update-user-form"),
+  {
+    loading: () => <Spinner />,
+    ssr: false,
+  },
+);
 const UserProfileContent = ({ profile }: UserProfileProps) => {
   const { data: profileData, isPending } = useQuery({
     queryKey: ["userProfile"],

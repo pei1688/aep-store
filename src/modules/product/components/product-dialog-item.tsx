@@ -1,10 +1,225 @@
 "use client";
-import ProductDialogContent from "./product-dialog-content";
-import { ProductWithCategory } from "@/types/product/product";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useProductStock } from "@/hooks/use-product-stock";
+import { useProductVariants } from "@/hooks/use-product-variants";
+import { useCartStore } from "@/store/cart-store";
+import { useProductDetailStore } from "@/store/product-detail-store";
+import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import { QuantitySelector } from "./product-detail/quantity-selector";
+import { VariantSelector } from "./product-detail/variant-selector";
+import { toast } from "sonner";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Spinner from "@/components/spinner";
+import { ProductDetailProps } from "@/types/product/product-detail";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useProductById } from "@/services/products";
 
 
-const ProductDialogItem = ({ product }: { product: ProductWithCategory }) => {
-  return <ProductDialogContent product={product} />;
+const ProductDialogItem = ({ productId }: { productId: string }) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="cursor-pointer" asChild>
+        <ShoppingCart className="size-6 text-neutral-800 hover:text-neutral-600" />
+      </DialogTrigger>
+      <DialogContent className="max-h-[90vh] overflow-y-auto p-4 sm:max-w-3xl">
+        <VisuallyHidden>
+          <DialogTitle>商品詳情</DialogTitle>
+        </VisuallyHidden>
+        <ProductDialogContentFetcher productId={productId} />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+
+const ProductDialogContentFetcher = ({ productId }: { productId: string }) => {
+  const { product, error, isPending } = useProductById({ id: productId });
+
+  if (isPending) {
+    return (
+      <div className="flex h-[500px] w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return <div>無法載入商品，請稍後再試。</div>;
+  }
+
+  return <ProductDialogDetail product={product} />;
+};
+
+const ProductDialogDetail = ({ product }: ProductDetailProps) => {
+  const { addItem } = useCartStore();
+  const {
+    currentImage,
+    selectedVariants,
+    selectedSpec2,
+    quantity,
+    setCurrentImage,
+    setSelectedVariants,
+    setSelectedSpec2,
+    setQuantity,
+    resetState,
+  } = useProductDetailStore();
+  const router = useRouter();
+  const { groupedVariants } = useProductVariants(product);
+  const { variantInfo, stockValidation, isAllVariantsSelected, finalPrice } =
+    useProductStock(product, groupedVariants);
+
+  useEffect(() => {
+    if (product.imgUrl?.[0]) {
+      resetState(product.imgUrl[0]);
+    }
+    return () => resetState(product.imgUrl?.[0] || "");
+  }, [product, resetState]);
+
+  const handleVariantSelect = (specName: string, variant: any) => {
+    const isCurrentlySelected = selectedVariants[specName] === variant.id;
+    const newVariants = { ...selectedVariants };
+    if (isCurrentlySelected) {
+      delete newVariants[specName];
+    } else {
+      newVariants[specName] = variant.id;
+    }
+    setSelectedVariants(newVariants);
+    if (variant.spec1Image) {
+      setCurrentImage(variant.spec1Image);
+    }
+  };
+
+  const handleSpec2Select = (variantId: string, spec2: any) => {
+    const isCurrentlySelected = selectedSpec2[variantId] === spec2.id;
+    const newSpec2 = { ...selectedSpec2 };
+    if (isCurrentlySelected) {
+      delete newSpec2[variantId];
+    } else {
+      newSpec2[variantId] = spec2.id;
+    }
+    setSelectedSpec2(newSpec2);
+  };
+
+  const generateVariantText = () => {
+    if (!product.variants) return "";
+    return Object.entries(selectedVariants)
+      .map(([specName, variantId]) => {
+        const variant = product.variants?.find((v) => v.id === variantId);
+        if (!variant) return "";
+        let text = `${specName}: ${variant.spec1Value}`;
+        const spec2Id = selectedSpec2[variantId];
+        const spec2 = variant.spec2Combinations?.find((s) => s.id === spec2Id);
+        if (spec2) {
+          text += `, ${spec2.spec2Name}: ${spec2.spec2Value}`;
+        }
+        return text;
+      })
+      .join(" | ");
+  };
+
+  const validateSelection = () => {
+    if (Object.keys(groupedVariants).length > 0 && !isAllVariantsSelected) {
+      toast.error("請選擇所有商品選項");
+      return false;
+    }
+    if (stockValidation.isExceeded) {
+      toast.error(
+        `庫存不足，最多只能再加入 ${stockValidation.availableQuantity} 件商品`,
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const createCartItem = () => ({
+    productId: product.id,
+    name: product.name,
+    price: finalPrice,
+    image: currentImage,
+    quantity,
+    selectedVariants,
+    variantText: generateVariantText(),
+    stock: stockValidation.currentStock,
+    variantId: variantInfo.variantId,
+    spec2Id: variantInfo.spec2Id,
+  });
+
+  const handleAddToCart = () => {
+    if (!validateSelection()) return;
+    addItem(createCartItem());
+    toast.success("已加入購物車");
+  };
+
+  const handleBuyNow = () => {
+    if (!validateSelection()) return;
+    addItem(createCartItem());
+    router.push("/cart");
+  };
+
+  const isDisabled =
+    variantInfo.stock === 0 ||
+    (Object.keys(groupedVariants).length > 0 && !isAllVariantsSelected);
+
+  return (
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+      <div className="relative h-96 w-full">
+        <Image
+          src={currentImage || "/default-product.png"}
+          alt={product.name}
+          className="rounded-md object-cover"
+          fill
+        />
+      </div>
+      <div className="flex flex-col">
+        <DialogHeader>
+          <DialogTitle>{product.name}</DialogTitle>
+        </DialogHeader>
+        <p className="mt-2 text-lg font-semibold">NT$ {finalPrice}</p>
+        <Separator className="my-4" />
+        <div className="flex-grow">
+          <VariantSelector
+            groupedVariants={groupedVariants}
+            product={product}
+            onVariantSelect={handleVariantSelect}
+            onSpec2Select={handleSpec2Select}
+          />
+        </div>
+        <QuantitySelector
+          stock={variantInfo.stock}
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+        />
+        <div className="mt-6 flex flex-col gap-4">
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={handleBuyNow}
+            disabled={isDisabled}
+          >
+            立即購買
+          </Button>
+          <Button
+            variant="default2"
+            className="w-full bg-fuchsia-200/50 text-fuchsia-800"
+            onClick={handleAddToCart}
+            disabled={isDisabled}
+          >
+            加入購物車
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ProductDialogItem;

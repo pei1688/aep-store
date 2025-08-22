@@ -1,17 +1,21 @@
-import { getProductFormSearch } from "@/action/search/get";
-import {
-  Category,
-  Collection,
-  Prisma,
-  Product,
-  ProductVariant,
-} from "@prisma/client";
+import { Category, Collection, Product, ProductVariant } from "@prisma/client";
 
 // ProductWithCategory
 export type ProductWithCategory = Product & {
   category: Category;
   variants?: ProductVariant[];
   collection?: Collection;
+};
+
+export type ProductListItem = {
+  id: string;
+  name: string;
+  price: number;
+  imgUrl: string[];
+  category: {
+    id: string;
+    name: string;
+  };
 };
 
 export interface CartItem {

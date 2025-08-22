@@ -4,10 +4,10 @@ import { Separator } from "@/components/ui/separator";
 import ProductDetail from "../../components/product-detail/product-detail";
 import ProductDescription from "../../components/product-description";
 import ProductAlsoLike from "../../components/prodcut-alsolike";
-import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "@/action/product";
 import Spinner from "@/components/spinner";
 import { Prisma } from "@prisma/client";
+import { useProductById } from "@/services/products";
 
 export type GetProducts = Prisma.PromiseReturnType<typeof getProduct>;
 interface ProductContentProps {
@@ -16,13 +16,8 @@ interface ProductContentProps {
 }
 
 const ProductContent = ({ productId, initialData }: ProductContentProps) => {
-  const {
-    data: product,
-    error,
-    isPending,
-  } = useQuery({
-    queryKey: ["product", productId],
-    queryFn: () => getProduct(productId),
+  const { product, error, isPending } = useProductById({
+    id: productId,
     initialData,
   });
 

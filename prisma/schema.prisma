@@ -32,6 +32,7 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([categoryId])
   @@map("Product")
 }
 
@@ -107,6 +108,8 @@ model ProductCollection {
 
   createdAt DateTime @default(now())
 
+  @@index([productId])
+  @@index([collectionId])
   @@map("ProductCollection")
 }
 

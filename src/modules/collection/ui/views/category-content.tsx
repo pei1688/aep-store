@@ -3,7 +3,7 @@ import PageBreadcrumb from "@/components/layout/page-breadcrumb";
 import Spinner from "@/components/spinner";
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import MobileFilterSidebar from "../../components/mobile-filter-sidebar";
+import dynamic from "next/dynamic";
 import FilterSidebar from "../../components/filter-sidebar";
 import SortSelector from "../../components/sort-selector";
 import CategoryProducts from "../../components/category-products";
@@ -12,6 +12,10 @@ import {
   useAllProductsByCollectionId,
 } from "@/services/products";
 import { createProductFilters } from "@/lib/filter";
+
+const MobileFilterSidebar = dynamic(
+  () => import("../../components/mobile-filter-sidebar"),
+);
 
 interface CategoryPageContentProps {
   collectionId: string;

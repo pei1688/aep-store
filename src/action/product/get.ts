@@ -2,23 +2,35 @@
 
 import { prisma } from "@/lib/prisma";
 
+// 共用的 include 設定
+const productInclude = {
+  category: true,
+  variants: {
+    include: {
+      spec2Combinations: true,
+    },
+  },
+};
+
+// -----------------------
+
 export async function getProducts() {
   try {
-    const products = await prisma.product.findMany();
-
+    const products = await prisma.product.findMany({
+      include: productInclude, // 套用共用 include
+    });
     return products;
   } catch (error) {
     console.log("商品獲取錯誤", error);
   }
 }
 
-//獲取相關的分類隨機商品
+// 獲取相關的分類隨機商品
 export async function getRelatedProducts(
   categoryId: string,
   excludeProductId: string,
   limit = 4,
 ) {
-  // 取得同分類商品數量
   const totalProducts = await prisma.product.count({
     where: {
       categoryId,
@@ -26,7 +38,6 @@ export async function getRelatedProducts(
     },
   });
 
-  // 計算隨機跳過的數量
   const skip = Math.max(0, Math.floor(Math.random() * (totalProducts - limit)));
 
   const related = await prisma.product.findMany({
@@ -34,16 +45,9 @@ export async function getRelatedProducts(
       categoryId,
       NOT: { id: excludeProductId },
     },
-    skip: skip,
+    skip,
     take: limit,
-    include: {
-      category: true,
-      variants: {
-        include: {
-          spec2Combinations: true,
-        },
-      },
-    },
+    include: productInclude, // 共用
   });
 
   return related;
@@ -53,16 +57,8 @@ export async function getProduct(productId: string) {
   try {
     const product = await prisma.product.findUnique({
       where: { id: productId },
-      include: {
-        category: true,
-        variants: {
-          include: {
-            spec2Combinations: true,
-          },
-        },
-      },
+      include: productInclude, // 共用
     });
-
     return product;
   } catch (error) {
     console.log("商品獲取錯誤", error);
@@ -76,16 +72,7 @@ export async function getProductsByCollectionId(collectionId: string) {
       productCollections: {
         include: {
           collection: true,
-          product: {
-            include: {
-              category: true,
-              variants: {
-                include: {
-                  spec2Combinations: true,
-                },
-              },
-            },
-          },
+          product: { include: productInclude }, // 共用
         },
       },
     },

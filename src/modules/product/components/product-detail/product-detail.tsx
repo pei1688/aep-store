@@ -56,13 +56,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
     setCurrentProductId,
   ]);
 
-  // 組件清理
-  useEffect(() => {
-    return () => {
-      return resetState(product.imgUrl[0] || "");
-    };
-  }, [resetState, product.imgUrl]);
-
   // 處理變體選擇
   const handleVariantSelect = (specName: string, variant: any) => {
     const isCurrentlySelected = selectedVariants[specName] === variant.id;

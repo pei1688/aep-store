@@ -6,16 +6,22 @@ export async function getCollectionById(collectionId: string) {
   try {
     const collection = await prisma.collection.findUnique({
       where: { id: collectionId },
-      include: {
+      select: {
+        id: true,
+        name: true,
         productCollections: {
-          include: {
-            collection: true,
+          select: {
+            id: true,
             product: {
-              include: {
-                category: true,
-                variants: {
-                  include: {
-                    spec2Combinations: true,
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                imgUrl: true,
+                category: {
+                  select: {
+                    id: true,
+                    name: true,
                   },
                 },
               },
@@ -27,6 +33,8 @@ export async function getCollectionById(collectionId: string) {
     return collection;
   } catch (error) {
     console.log("合集獲取錯誤", error);
+    // Consider returning null or throwing the error for better error handling upstream
+    return null;
   }
 }
 

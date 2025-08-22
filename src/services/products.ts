@@ -3,6 +3,7 @@ import {
   getProductsByCollectionId,
   getRelatedProducts,
 } from "@/action/product";
+import { GetProducts } from "@/modules/product/ui/views/proeduct-content";
 import { RelatedProductProps } from "@/types/product/product";
 import { Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -33,7 +34,13 @@ export const useAllProductsByCollectionId = ({
 };
 
 //🔸
-export const useProductById = ({ id }: { id: string }) => {
+
+interface ProductByIdProps {
+  id: string;
+  initialData?: GetProducts;
+}
+
+export const useProductById = ({ id, initialData }: ProductByIdProps) => {
   const {
     data: product,
     error,
@@ -42,6 +49,8 @@ export const useProductById = ({ id }: { id: string }) => {
     queryKey: ["product", id],
     queryFn: () => getProduct(id),
     staleTime: 1000 * 60 * 60,
+    enabled: !!id,
+    initialData,
   });
   return { product, isPending, error };
 };

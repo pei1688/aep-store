@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/carousel";
 const Hero = () => {
   return (
-    <section className="relative mx-auto h-screen w-full ">
+    <section className="relative mx-auto h-screen w-full">
       <Carousel
         plugins={[
           Autoplay({
@@ -29,28 +29,31 @@ const Hero = () => {
                 alt="商品banner"
                 className="rounded-md object-cover shadow-xl"
                 fill
+                priority
               />
             </div>
           </CarouselItem>
           <CarouselItem>
             {" "}
-            <div className="relative  w-full h-screen">
+            <div className="relative h-screen w-full">
               <Image
                 src="/banner2.jpg"
                 alt="商品banner"
                 className="rounded-md object-cover shadow-xl"
                 fill
+                priority
               />
             </div>
           </CarouselItem>
           <CarouselItem>
             {" "}
-            <div className="relative w-full h-screen">
+            <div className="relative h-screen w-full">
               <Image
                 src="/banner3.jpg"
                 alt="商品banner"
                 className="rounded-md object-cover shadow-xl"
                 fill
+                priority
               />
             </div>
           </CarouselItem>

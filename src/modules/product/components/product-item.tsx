@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductDialogItem from "./product-dialog-item";
-import { ProductWithCategory } from "@/types/product/product";
+import { ProductListItem } from "@/types/product/product";
 
 interface ProductItemProps {
-  product: ProductWithCategory;
+  product: ProductListItem;
 }
 
 const ProductItem = ({ product }: ProductItemProps) => {
@@ -32,7 +32,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
             onClick={(e) => e.preventDefault()}
           >
             <p className="font-semibold">NT$ {product.price}</p>
-            <ProductDialogItem product={product} />
+            <ProductDialogItem productId={product.id} />
           </div>
         </div>
       </Link>
