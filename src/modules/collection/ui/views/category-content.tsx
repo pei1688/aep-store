@@ -4,7 +4,9 @@ import Spinner from "@/components/spinner";
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import FilterSidebar from "../../components/filter-sidebar";
+const FilterSidebar = dynamic(() => import("../../components/filter-sidebar"), {
+  ssr: false,
+});
 import SortSelector from "../../components/sort-selector";
 import CategoryProducts from "../../components/category-products";
 import {

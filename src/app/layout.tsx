@@ -7,8 +7,14 @@ import Footer from "@/components/layout/footer";
 import ReactQueryProvider from "@/providers/react-query-provider";
 
 export const metadata: Metadata = {
-  title: "AEp-Store",
+  title: {
+    default: 'AEp Store',
+    template: '%s | AEp Store',
+  },
   description: "代購，電商，海外代購",
+  openGraph:{
+
+  }
 };
 
 export default function RootLayout({

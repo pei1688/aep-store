@@ -1,11 +1,17 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import ProductDialogItem from "./product-dialog-item";
 import { ProductListItem } from "@/types/product/product";
+import dynamic from "next/dynamic";
 
 interface ProductItemProps {
   product: ProductListItem;
 }
+
+const ProductDialogItem = dynamic(
+  () => import("./product-dialog/product-dialog-item"),
+  { ssr: false },
+);
 
 const ProductItem = ({ product }: ProductItemProps) => {
   return (

@@ -4,16 +4,21 @@ import { getUserAddress } from "@/action/user/get";
 import Spinner from "@/components/spinner";
 import AddressCard from "../../components/address-card";
 import AddAddressCard from "../../components/add-address-card";
-import AddressFormDialog from "../../components/add-address-form-dialog";
-import DeleteAddressDialog from "../../components/delete-address-dilalog";
+import dynamic from "next/dynamic";
+
+const AddressFormDialog = dynamic(
+  () => import('../../components/add-address-form-dialog'),
+  { ssr: false },
+);
+const DeleteAddressDialog = dynamic(
+  () => import('../../components/delete-address-dilalog'),
+  { ssr: false },
+);
 
 const AddressContent = () => {
   const { data: addressData, isPending } = useQuery({
     queryKey: ["addresses"],
-    queryFn: () => {
-      console.log("Fetching addresses");
-      return getUserAddress();
-    },
+    queryFn: () =>  getUserAddress(),
     staleTime: 0,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,

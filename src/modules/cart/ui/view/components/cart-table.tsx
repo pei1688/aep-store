@@ -153,7 +153,7 @@ const CartTable = ({
         </Table>
       </div>
 
-      {/* 手機端卡片視圖 */}
+      {/* mobile*/}
       <div className="lg:hidden">
         {/* 全選控制 */}
         <div className="mb-4 flex items-center gap-3 rounded-sm bg-neutral-50 p-4 shadow-md">
@@ -171,12 +171,9 @@ const CartTable = ({
         </div>
 
         {/* 商品卡片列表 */}
-        <div className="space-y-4 overflow-y-auto max-h-[400px] md:max-h-[500px] shadow-md">
+        <div className="max-h-[400px] space-y-4 overflow-y-auto shadow-md md:max-h-[500px]">
           {items.map((item) => (
-            <Card
-              key={item.id}
-              className="overflow-hidden rounded-sm "
-            >
+            <Card key={item.id} className="overflow-hidden rounded-sm">
               <CardContent className="p-4">
                 {/* 選擇框和刪除按鈕 */}
                 <div className="mb-3 flex items-center justify-between">

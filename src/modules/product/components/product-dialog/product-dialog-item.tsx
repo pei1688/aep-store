@@ -2,7 +2,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -11,19 +10,19 @@ import { useProductVariants } from "@/hooks/use-product-variants";
 import { useCartStore } from "@/store/cart-store";
 import { useProductDetailStore } from "@/store/product-detail-store";
 import { ShoppingCart } from "lucide-react";
-import Image from "next/image";
-import { QuantitySelector } from "./product-detail/quantity-selector";
-import { VariantSelector } from "./product-detail/variant-selector";
+import { QuantitySelector } from "../product-detail/quantity-selector";
+import { VariantSelector } from "../product-detail/variant-selector";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/spinner";
 import { ProductDetailProps } from "@/types/product/product-detail";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useProductById } from "@/services/products";
-
+import { ProductDialogImage } from "./product-dialog-image";
+import { ProductDialogHeader } from "./product-dialog-header";
+import { ProductDialogActions } from "./product-dialog-actions";
 
 const ProductDialogItem = ({ productId }: { productId: string }) => {
   return (
@@ -40,7 +39,6 @@ const ProductDialogItem = ({ productId }: { productId: string }) => {
     </Dialog>
   );
 };
-
 
 const ProductDialogContentFetcher = ({ productId }: { productId: string }) => {
   const { product, error, isPending } = useProductById({ id: productId });
@@ -171,53 +169,35 @@ const ProductDialogDetail = ({ product }: ProductDetailProps) => {
     (Object.keys(groupedVariants).length > 0 && !isAllVariantsSelected);
 
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-      <div className="relative h-96 w-full">
-        <Image
-          src={currentImage || "/default-product.png"}
-          alt={product.name}
-          className="rounded-md object-cover"
-          fill
+    <div className="flex flex-col">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+        <ProductDialogImage
+          imageUrl={currentImage || "/default-product.png"}
+          altText={product.name}
         />
-      </div>
-      <div className="flex flex-col">
-        <DialogHeader>
-          <DialogTitle>{product.name}</DialogTitle>
-        </DialogHeader>
-        <p className="mt-2 text-lg font-semibold">NT$ {finalPrice}</p>
-        <Separator className="my-4" />
-        <div className="flex-grow">
-          <VariantSelector
-            groupedVariants={groupedVariants}
-            product={product}
-            onVariantSelect={handleVariantSelect}
-            onSpec2Select={handleSpec2Select}
+        <div className="flex flex-col">
+          <ProductDialogHeader name={product.name} price={finalPrice} />
+          <Separator className="my-4" />
+          <div className="flex-grow">
+            <VariantSelector
+              groupedVariants={groupedVariants}
+              product={product}
+              onVariantSelect={handleVariantSelect}
+              onSpec2Select={handleSpec2Select}
+            />
+          </div>
+          <QuantitySelector
+            stock={variantInfo.stock}
+            quantity={quantity}
+            onQuantityChange={setQuantity}
           />
         </div>
-        <QuantitySelector
-          stock={variantInfo.stock}
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-        />
-        <div className="mt-6 flex flex-col gap-4">
-          <Button
-            variant="default"
-            className="w-full"
-            onClick={handleBuyNow}
-            disabled={isDisabled}
-          >
-            立即購買
-          </Button>
-          <Button
-            variant="default2"
-            className="w-full bg-fuchsia-200/50 text-fuchsia-800"
-            onClick={handleAddToCart}
-            disabled={isDisabled}
-          >
-            加入購物車
-          </Button>
-        </div>
       </div>
+      <ProductDialogActions
+        onBuyNow={handleBuyNow}
+        onAddToCart={handleAddToCart}
+        disabled={isDisabled}
+      />
     </div>
   );
 };
