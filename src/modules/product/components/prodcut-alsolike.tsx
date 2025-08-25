@@ -1,3 +1,4 @@
+import Spinner from "@/components/spinner";
 import ProductItem from "./product-item";
 import {
   Carousel,
@@ -16,7 +17,7 @@ const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
   });
 
   if (isPending) {
-    return <div>載入推薦商品中...</div>;
+    return <Spinner />;
   }
 
   if (error) {
