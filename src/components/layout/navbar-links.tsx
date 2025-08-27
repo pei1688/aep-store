@@ -11,6 +11,7 @@ import MobileNavMenu from "./mobile/navbar-moblie";
 import { CollectionWithCategory } from "@/types/collections";
 import NavbarSearch from "./navbar-search";
 import MobileCart from "./mobile/mobile-cart";
+import MobileUserIcon from "./mobile/mobile-user-icon";
 
 interface NavLinksProps {
   collections: CollectionWithCategory[];
@@ -24,13 +25,17 @@ export const NavLinks = ({ collections }: NavLinksProps) => {
   return (
     <>
       {/* 桌面版導航 */}
-      <nav className="hidden items-center justify-between gap-4 lg:flex">
-        <div className="flex items-center gap-6">
+      <div className="hidden lg:flex lg:items-center lg:justify-between lg:w-full">
+        {/* 左邊佔位 - 保持平衡 */}
+        <div className="flex-1"></div>
+        
+        {/* 中間的導航連結 */}
+        <nav className="flex items-center gap-8">
           {filterCollection?.map((col) => (
             <Link
               key={col.id}
               href={`/collections/${col.id}/全部`}
-              className="inline-flex h-9 py-2 text-sm font-medium transition-all"
+              className="inline-flex h-9 py-2 text-sm font-medium transition-all hover:text-neutral-600"
             >
               {col.name}
             </Link>
@@ -47,24 +52,45 @@ export const NavLinks = ({ collections }: NavLinksProps) => {
           >
             最新消息
           </Link>
-        </div>
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList className="gap-3">
-            <NavigationMenuItem className="">
-              <NavbarUser />
-            </NavigationMenuItem>
-            <NavbarCart />
-          </NavigationMenuList>
-        </NavigationMenu>
-      </nav>
+        </nav>
 
-      {/* 手機版選單按鈕 */}
-      <div className="flex items-center gap-4">
-        <div className="flex md:hidden gap-4">
+        {/* 右邊的功能區域 */}
+        <div className="flex items-center gap-4 flex-1 justify-end">
+          <NavbarSearch />
+          <NavigationMenu>
+            <NavigationMenuList className="gap-3">
+              <NavigationMenuItem>
+                <NavbarUser />
+              </NavigationMenuItem>
+              <NavbarCart />
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </div>
+
+      {/* 中等螢幕和手機版 */}
+      <div className="flex items-center justify-end gap-4 lg:hidden w-full">
+        {/* 中等螢幕顯示搜尋和購物車 */}
+        <div className="hidden md:flex md:items-center md:gap-4">
+          <NavbarSearch />
+          <NavigationMenu>
+            <NavigationMenuList className="gap-3">
+              <NavigationMenuItem>
+                <NavbarUser />
+              </NavigationMenuItem>
+              <NavbarCart />
+            </NavigationMenuList>
+          </NavigationMenu>
+          <MobileNavMenu collections={collections} />
+        </div>
+        
+        {/* 手機版顯示搜尋、購物車、用戶和選單按鈕 */}
+        <div className="flex items-center gap-3 md:hidden">
           <NavbarSearch />
           <MobileCart />
+          <MobileUserIcon />
+          <MobileNavMenu collections={collections} />
         </div>
-        <MobileNavMenu collections={collections} />
       </div>
     </>
   );

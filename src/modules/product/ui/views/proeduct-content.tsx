@@ -8,6 +8,8 @@ import { getProduct } from "@/action/product";
 import Spinner from "@/components/spinner";
 import { Prisma } from "@prisma/client";
 import { useProductById } from "@/services/products";
+import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export type GetProducts = Prisma.PromiseReturnType<typeof getProduct>;
 interface ProductContentProps {
@@ -16,28 +18,52 @@ interface ProductContentProps {
 }
 
 const ProductContent = ({ productId, initialData }: ProductContentProps) => {
+  const router = useRouter();
   const { product, error, isPending } = useProductById({
     id: productId,
     initialData,
   });
 
   if (isPending) {
-    return <Spinner />;
+    return (
+      <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0">
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>資料獲取失敗</div>;
+    return (
+      <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+          <h2 className="text-destructive text-lg font-semibold">載入失敗</h2>
+          <p className="text-destructive">
+            資料獲取失敗，請重新整理頁面或稍後再試。
+          </p>
+        </div>
+      </div>
+    );
   }
+
   if (!product) {
-    return <div className="text-md text-neutral-500">沒有相關商品資料</div>;
+    return (
+      <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0">
+        <div className="text-center">
+          <div className="text-md text-neutral-500">沒有相關商品資料</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <>
+    <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0">
+      {/* Product Content */}
       <ProductDetail product={product} />
       <Separator className="bg-primary/20 my-8" />
       <ProductDescription description={product.description} />
       <Separator className="bg-primary/20 my-8 md:px-0" />
+
+      {/* Related Products - 性能優化: 延遲載入 */}
       <div className="flex w-full flex-col items-center">
         <h2 className="ae-recommendations-title py-12">你可能也喜歡</h2>
         <ProductAlsoLike
@@ -45,7 +71,7 @@ const ProductContent = ({ productId, initialData }: ProductContentProps) => {
           productId={product.id}
         />
       </div>
-    </>
+    </div>
   );
 };
 

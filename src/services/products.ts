@@ -2,6 +2,9 @@ import {
   getProduct,
   getProductsByCollectionId,
   getRelatedProducts,
+  getFilteredProductsByCollection,
+  type ProductFilterParams,
+  type FilteredProductsResult,
 } from "@/action/product";
 import { GetProducts } from "@/modules/product/ui/views/proeduct-content";
 import { RelatedProductProps } from "@/types/product/product";
@@ -70,4 +73,66 @@ export const useRelatedProducts = ({
   });
 
   return { products, isPending, error };
+};
+
+//🔸 使用後端過濾的產品查詢
+interface UseFilteredProductsOptions extends Omit<ProductFilterParams, 'collectionId'> {
+  collectionId: string;
+  enabled?: boolean;
+}
+
+export const useFilteredProductsByCollection = ({
+  collectionId,
+  categorySlug,
+  categories,
+  brands,
+  sortBy = "newest",
+  page = 1,
+  limit = 4,
+  enabled = true,
+}: UseFilteredProductsOptions) => {
+  const {
+    data,
+    isError,
+    isPending,
+    error,
+  } = useQuery<FilteredProductsResult>({
+    queryKey: [
+      "filteredProducts",
+      collectionId,
+      categorySlug,
+      categories,
+      brands,
+      sortBy,
+      page,
+      limit,
+    ],
+    queryFn: () =>
+      getFilteredProductsByCollection({
+        collectionId,
+        categorySlug,
+        categories,
+        brands,
+        sortBy,
+        page,
+        limit,
+      }),
+    enabled: enabled && !!collectionId,
+    staleTime: 1000 * 60 * 5, // 5分鐘緩存
+  });
+
+  return {
+    data,
+    products: data?.products || [],
+    totalCount: data?.totalCount || 0,
+    totalPages: data?.totalPages || 0,
+    currentPage: data?.currentPage || 1,
+    hasNextPage: data?.hasNextPage || false,
+    hasPreviousPage: data?.hasPreviousPage || false,
+    availableFilters: data?.availableFilters || { categories: [], brands: [] },
+    collectionInfo: data?.collectionInfo || null,
+    isError,
+    isPending,
+    error,
+  };
 };

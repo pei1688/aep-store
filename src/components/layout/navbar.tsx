@@ -10,8 +10,9 @@ const Navbar = async () => {
   return (
     <header className="z-50 flex w-full items-center justify-between bg-[#FAFAFCCC] shadow-sm">
       <div className="container mx-auto max-w-7xl px-4 lg:px-0">
-        <div className="flex h-16 items-center justify-between">
-          <Link href={"/"} className="flex cursor-pointer items-center gap-4">
+        <div className="flex h-16 items-center">
+          {/* Logo - 左邊 */}
+          <Link href={"/"} className="flex cursor-pointer items-center gap-4 flex-shrink-0">
             <Image
               src={"/logo.png"}
               alt="茄蘋帝國Logo"
@@ -21,12 +22,10 @@ const Navbar = async () => {
             <p className="hidden text-2xl font-semibold md:flex">AEp Store</p>
           </Link>
 
-          {/* 搜尋功能 */}
-          <div className="hidden md:flex">
-            <NavbarSearch />
+          {/* 導航功能 - 佔據剩餘空間 */}
+          <div className="flex-1">
+            <NavLinks collections={collections} />
           </div>
-          {/* 導航功能 */}
-          <NavLinks collections={collections} />
         </div>
       </div>
     </header>

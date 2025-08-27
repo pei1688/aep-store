@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -8,11 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 interface SortOptionsProps {
   currentSort: string;
-  collectionId: string;
-  categorySlug: string;
-  brandFilter: string | null;
 }
 
 const sortOptions = [
@@ -24,14 +22,10 @@ const sortOptions = [
   { value: "name-desc", label: "名稱：Z到A" },
 ];
 
-export default function SortSelector({
-  currentSort,
-  collectionId,
-  categorySlug,
-  brandFilter,
-}: SortOptionsProps) {
+export default function SortSelector({ currentSort }: SortOptionsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const handleSortChange = (sortValue: string) => {
     const params = new URLSearchParams(searchParams);
@@ -42,21 +36,22 @@ export default function SortSelector({
       params.set("sortBy", sortValue);
     }
 
-    if (brandFilter) {
-      params.set("brand", brandFilter);
-    }
+    // Reset to first page when sorting changes
+    params.delete("page");
+
     const queryString = params.toString();
-    const url = `/collections/${collectionId}/${categorySlug}${queryString ? `?${queryString}` : ""}`;
-    router.push(url);
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.push(newUrl);
   };
 
   return (
     <div className="flex items-center justify-end gap-2">
+      <span className="text-sm text-gray-600">排序：</span>
       <Select
         value={currentSort}
         onValueChange={(value) => handleSortChange(value)}
       >
-        <SelectTrigger className="bg-transparent w-full p-0 shadow-transparent focus-visible:ring-transparent">
+        <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="排序方式" />
         </SelectTrigger>
         <SelectContent>
