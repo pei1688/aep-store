@@ -2,7 +2,7 @@
 
 import { useMemo, memo } from "react";
 import { ProductWithCategory } from "@/types/product/product";
-import ProductItem from "@/modules/product/components/product-item";
+import ProductItemOptimized from "@/modules/product/components/product-item-optimized";
 
 interface CategoryProductsProps {
   allProducts: ProductWithCategory[];
@@ -48,10 +48,11 @@ const CategoryProducts = memo(function CategoryProducts({
         >
           {allProducts.length > 0 ? (
             <div className="grid grid-cols-2 justify-items-center gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {allProducts.map((product) => (
-                <ProductItem 
+              {allProducts.map((product, index) => (
+                <ProductItemOptimized 
                   key={product.id} 
                   product={product}
+                  priority={index < 4}
                 />
               ))}
             </div>

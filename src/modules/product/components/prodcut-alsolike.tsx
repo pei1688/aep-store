@@ -1,5 +1,4 @@
 import Spinner from "@/components/spinner";
-import ProductItem from "./product-item";
 import {
   Carousel,
   CarouselContent,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { useRelatedProducts } from "@/services/products";
 import { RelatedProductProps } from "@/types/product/product";
+import ProductItemOptimized from "./product-item-optimized";
 
 const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
   const { products, error, isPending } = useRelatedProducts({
@@ -37,7 +37,7 @@ const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
             key={pd.id}
             className="max-w-xs basis-full sm:basis-1/2 lg:basis-1/3"
           >
-            <ProductItem product={pd} />
+            <ProductItemOptimized product={pd} />
           </CarouselItem>
         ))}
       </CarouselContent>

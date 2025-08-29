@@ -6,20 +6,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Filter, X } from "lucide-react";
 
 interface MobileFilterSidebarOptimizedProps {
@@ -49,7 +50,8 @@ export default function MobileFilterSidebarOptimized({
   }, [searchParams]);
 
   // 計算總選中數量
-  const totalSelectedFilters = selectedCategories.length + selectedBrands.length;
+  const totalSelectedFilters =
+    selectedCategories.length + selectedBrands.length;
 
   // 更新 URL 參數的通用函數
   const updateUrlParams = useCallback(
@@ -69,7 +71,6 @@ export default function MobileFilterSidebarOptimized({
       const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
 
       router.push(newUrl);
-      setIsOpen(false); // 關閉篩選面板
     },
     [searchParams, pathname, router],
   );
@@ -123,34 +124,34 @@ export default function MobileFilterSidebarOptimized({
   }, [searchParams, pathname, router]);
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <DrawerTrigger asChild>
         <Button variant="outline" className="w-full">
           <Filter className="mr-2 h-4 w-4" />
           篩選條件
           {totalSelectedFilters > 0 && (
-            <span className="ml-2 rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground">
+            <span className="bg-primary text-primary-foreground ml-2 rounded-full px-2 py-1 text-xs">
               {totalSelectedFilters}
             </span>
           )}
         </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-        <SheetHeader>
-          <SheetTitle className="flex items-center justify-between">
+      </DrawerTrigger>
+      <DrawerContent className="h-full">
+        <DrawerHeader>
+          <DrawerTitle className="flex items-center justify-between">
             <span>篩選條件</span>
-            <SheetClose asChild>
+            <DrawerClose asChild>
               <Button variant="ghost" size="sm">
                 <X className="h-4 w-4" />
               </Button>
-            </SheetClose>
-          </SheetTitle>
-          <SheetDescription>
+            </DrawerClose>
+          </DrawerTitle>
+          <DrawerDescription>
             選擇您想要的篩選條件來縮小搜尋範圍
-          </SheetDescription>
-        </SheetHeader>
+          </DrawerDescription>
+        </DrawerHeader>
 
-        <div className="mt-6 space-y-4">
+        <div className="max-h-96 space-y-4 overflow-y-auto px-4 pb-4">
           {/* 分類篩選 */}
           {availableFilters.categories.length > 0 && (
             <Accordion type="single" defaultValue="category" collapsible>
@@ -169,7 +170,10 @@ export default function MobileFilterSidebarOptimized({
                       const checkboxId = `mobile-category-${category}`;
 
                       return (
-                        <div key={category} className="flex items-center space-x-2">
+                        <div
+                          key={category}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={checkboxId}
                             checked={isChecked}
@@ -212,7 +216,10 @@ export default function MobileFilterSidebarOptimized({
                       const checkboxId = `mobile-brand-${brand}`;
 
                       return (
-                        <div key={brand} className="flex items-center space-x-2">
+                        <div
+                          key={brand}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={checkboxId}
                             checked={isChecked}
@@ -235,21 +242,26 @@ export default function MobileFilterSidebarOptimized({
               </AccordionItem>
             </Accordion>
           )}
+        </div>
 
+        <DrawerFooter>
           {/* 清除所有篩選按鈕 */}
           {totalSelectedFilters > 0 && (
-            <div className="mt-6">
-              <Button
-                variant="outline"
-                onClick={handleClearAllFilters}
-                className="w-full"
-              >
-                清除所有篩選 ({totalSelectedFilters})
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              onClick={handleClearAllFilters}
+              className="w-full"
+            >
+              清除所有篩選 ({totalSelectedFilters})
+            </Button>
           )}
-        </div>
-      </SheetContent>
-    </Sheet>
+          <DrawerClose asChild>
+            <Button variant="outline" className="w-full">
+              關閉
+            </Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

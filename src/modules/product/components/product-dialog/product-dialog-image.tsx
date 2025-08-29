@@ -17,6 +17,9 @@ export const ProductDialogImage = ({
         alt={altText}
         className="rounded-md object-cover"
         fill
+        loading="lazy"
+        quality={80}
+        sizes="(max-width: 768px) 100vw, 50vw"
       />
     </div>
   );

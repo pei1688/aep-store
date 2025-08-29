@@ -1,12 +1,19 @@
 "use client";
-import { Suspense, lazy, useCallback, useMemo } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Spinner from "@/components/spinner";
 import PageBreadcrumb from "@/components/layout/page-breadcrumb";
 import { useFilteredProductsByCollection } from "@/services/products";
 import { ProductWithCategory } from "@/types/product/product";
 
-// 動態載入組件 - 只有在需要時才載入
+// 動態載入組件
 const CategoryProducts = lazy(
   () => import("../../components/category-products"),
 );
@@ -21,6 +28,7 @@ const PaginationControls = lazy(
   () => import("@/components/pagination-controls"),
 );
 
+// 骨架屏組件
 const FilterSidebarSkeleton = () => (
   <div className="w-64 space-y-4">
     <div className="h-6 animate-pulse rounded bg-gray-200"></div>
@@ -59,20 +67,23 @@ const PaginationSkeleton = () => (
   </div>
 );
 
-interface CategoryPageContentLazyProps {
+interface CategoryPageContentEnhancedProps {
   collectionId: string;
   categorySlug?: string;
 }
 
-export default function CategoryPageContent({
+export default function CategoryPageContentEnhanced({
   collectionId,
   categorySlug,
-}: CategoryPageContentLazyProps) {
+}: CategoryPageContentEnhancedProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  // 避免重複解析 URL 參數
+  // 簡化載入狀態管理
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // 解析 URL 參數
   const filterParams = useMemo(() => {
     const categories =
       searchParams.get("categories")?.split(",").filter(Boolean) || [];
@@ -109,15 +120,36 @@ export default function CategoryPageContent({
     enabled: !!collectionId,
   });
 
-  const productsWithCategory = products.map((product) => ({
-    ...product,
-    category: product.category,
-  })) as ProductWithCategory[];
+  // 簡化載入狀態處理
+  useEffect(() => {
+    if (!isPending) {
+      setIsInitialLoad(false);
+    }
+  }, [isPending]);
 
-  const collectionName = collectionInfo?.name || "商品系列";
-  const categoryName = categorySlug ? decodeURIComponent(categorySlug) : "全部";
-  const collectionHref = `/collections/${collectionId}/全部`;
+  // 直接使用產品數據
+  const displayProducts = useMemo(() => {
+    return products.map((product) => ({
+      ...product,
+      category: product.category,
+    })) as ProductWithCategory[];
+  }, [products]);
 
+  // 麵包屑信息
+  const breadcrumbInfo = useMemo(() => {
+    const collectionName = collectionInfo?.name || "商品系列";
+    const decodedCategorySlug = categorySlug
+      ? decodeURIComponent(categorySlug)
+      : "全部";
+
+    return {
+      collectionName,
+      categoryName: decodedCategorySlug,
+      collectionHref: `/collections/${collectionId}/全部`,
+    };
+  }, [collectionInfo?.name, categorySlug, collectionId]);
+
+  // 分頁控制函數
   const goToPage = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -143,10 +175,12 @@ export default function CategoryPageContent({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [currentPage, totalPages]);
 
-  if (isPending) {
+  // 初始載入時顯示全頁 spinner
+  if (isInitialLoad && isPending) {
     return <Spinner />;
   }
 
+  // 錯誤狀態
   if (isError) {
     return (
       <div className="mx-auto mt-16 max-w-7xl md:mt-32">
@@ -162,12 +196,12 @@ export default function CategoryPageContent({
 
   return (
     <div className="mx-auto mt-16 min-h-screen max-w-7xl space-y-6 px-6 md:mt-32 md:px-0">
-      {/* Breadcrumb */}
+      {/* Breadcrumb - 始終穩定顯示 */}
       <PageBreadcrumb
-        currentPageName={categoryName}
+        currentPageName={breadcrumbInfo.categoryName}
         parentPage={{
-          name: collectionName,
-          href: collectionHref,
+          name: breadcrumbInfo.collectionName,
+          href: breadcrumbInfo.collectionHref,
         }}
         grandparentPage={{
           name: "商品系列",
@@ -175,9 +209,9 @@ export default function CategoryPageContent({
         }}
       />
 
-      <h1 className="text-3xl font-bold">{categoryName}</h1>
+      <h1 className="text-3xl font-bold">{breadcrumbInfo.categoryName}</h1>
 
-      {/* Mobile Filter */}
+      {/* Mobile Filter - 穩定顯示 */}
       <div className="md:hidden">
         <Suspense
           fallback={
@@ -189,7 +223,7 @@ export default function CategoryPageContent({
       </div>
 
       <div className="flex flex-col gap-6 md:flex-row">
-        {/* Desktop Filter Sidebar */}
+        {/* Desktop Filter Sidebar - 穩定顯示 */}
         <div className="hidden md:block md:w-64 md:flex-shrink-0">
           <Suspense fallback={<FilterSidebarSkeleton />}>
             <FilterSidebarOptimized availableFilters={availableFilters} />
@@ -198,6 +232,7 @@ export default function CategoryPageContent({
 
         {/* Products Content */}
         <div className="w-full flex-1">
+          {/* 商品計數和排序 - 穩定顯示 */}
           <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-gray-600">
               顯示 {(currentPage - 1) * filterParams.limit + 1}-
@@ -209,23 +244,27 @@ export default function CategoryPageContent({
             </Suspense>
           </div>
 
-          {/* Products */}
-          {productsWithCategory.length > 0 ? (
-            <Suspense fallback={<ProductGridSkeleton />}>
-              <CategoryProducts allProducts={productsWithCategory} />
-            </Suspense>
-          ) : (
-            <div className="py-12 text-center">
-              <div className="mb-2 text-lg text-gray-500">
-                沒有找到符合條件的商品
-              </div>
-              <div className="text-sm text-gray-400">
-                請嘗試調整篩選條件或瀏覽其他分類
-              </div>
-            </div>
-          )}
+          {/* Products - 使用平滑載入覆蓋層 */}
+          <div className="min-h-[400px]">
+          
+              {displayProducts.length > 0 ? (
+                <Suspense fallback={<ProductGridSkeleton />}>
+                  <CategoryProducts allProducts={displayProducts} />
+                </Suspense>
+              ) : (
+                <div className="py-12 text-center">
+                  <div className="mb-2 text-lg text-gray-500">
+                    沒有找到符合條件的商品
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    請嘗試調整篩選條件或瀏覽其他分類
+                  </div>
+                </div>
+              )}
+      
+          </div>
 
-          {/* Pagination */}
+          {/* Pagination - 簡化顯示 */}
           {totalPages > 1 && (
             <Suspense fallback={<PaginationSkeleton />}>
               <PaginationControls

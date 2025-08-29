@@ -119,6 +119,9 @@ export const useFilteredProductsByCollection = ({
       }),
     enabled: enabled && !!collectionId,
     staleTime: 1000 * 60 * 5, // 5分鐘緩存
+    gcTime: 1000 * 60 * 10, // 10分鐘垃圾回收時間
+    refetchOnWindowFocus: false, // 避免視窗焦點變化時重新獲取
+    retry: 1, // 減少重試次數
   });
 
   return {

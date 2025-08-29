@@ -51,26 +51,13 @@ export async function getFilteredProductsByCollection({
   limit = 4,
 }: ProductFilterParams): Promise<FilteredProductsResult> {
   try {
-    console.log("🔍 getFilteredProductsByCollection 開始:", {
-      collectionId,
-      categorySlug,
-      categories,
-      brands,
-      sortBy,
-      page,
-      limit,
-    });
-
+  
     // 首先獲取集合信息
     const collection = await prisma.collection.findUnique({
       where: { id: collectionId },
       select: { id: true, name: true, slug: true },
     });
-
-    console.log("🔍 找到的集合:", collection);
-
     if (!collection) {
-      console.error("❌ 集合未找到:", collectionId);
       throw new Error("Collection not found");
     }
 
@@ -86,13 +73,6 @@ export async function getFilteredProductsByCollection({
     // 添加分類過濾
     if (categorySlug) {
       const decodedCategorySlug = decodeURIComponent(categorySlug);
-      console.log("🔍 分類處理:", {
-        原始categorySlug: categorySlug,
-        解碼後: decodedCategorySlug,
-        是否為全部: decodedCategorySlug === "全部",
-        將添加分類過濾: decodedCategorySlug !== "全部"
-      });
-      
       // 只有當解碼後的分類不是 "全部" 時才添加分類過濾
       if (decodedCategorySlug !== "全部") {
         baseWhere.category = {
@@ -104,7 +84,6 @@ export async function getFilteredProductsByCollection({
     // 添加多分類過濾（來自 URL 參數）
     // 注意：如果有 categories 參數，它會覆蓋 categorySlug 的過濾
     if (categories.length > 0) {
-      console.log("🔍 使用多分類過濾，覆蓋 categorySlug:", categories);
       baseWhere.category = {
         name: {
           in: categories,
@@ -147,13 +126,6 @@ export async function getFilteredProductsByCollection({
     // 計算分頁
     const skip = (page - 1) * limit;
 
-    console.log("🔍 查詢條件:", {
-      baseWhere: JSON.stringify(baseWhere, null, 2),
-      orderBy,
-      skip,
-      take: limit,
-    });
-
     // 執行查詢
     const [products, totalCount] = await Promise.all([
       prisma.product.findMany({
@@ -167,16 +139,6 @@ export async function getFilteredProductsByCollection({
         where: baseWhere,
       }),
     ]);
-
-    console.log("🔍 查詢結果:", {
-      productsCount: products.length,
-      totalCount,
-      firstProduct: products[0] ? {
-        id: products[0].id,
-        name: products[0].name,
-        category: products[0].category?.name,
-      } : null,
-    });
 
     // 獲取可用的過濾選項（基於當前集合的所有產品）
     const allProductsInCollection = await prisma.product.findMany({

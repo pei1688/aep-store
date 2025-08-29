@@ -51,7 +51,7 @@ export default function SortSelector({ currentSort }: SortOptionsProps) {
         value={currentSort}
         onValueChange={(value) => handleSortChange(value)}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[180px] shadow-transparent">
           <SelectValue placeholder="排序方式" />
         </SelectTrigger>
         <SelectContent>

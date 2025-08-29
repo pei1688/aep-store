@@ -2,7 +2,7 @@
 
 import Spinner from "@/components/spinner";
 import useSearch from "@/hooks/use-search";
-import ProductItem from "@/modules/product/components/product-item";
+import ProductItemOptimized from "@/modules/product/components/product-item-optimized";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -59,7 +59,7 @@ const SearchContent = () => {
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {results.products.map((product) => (
-                <ProductItem key={product.id} product={product} />
+                <ProductItemOptimized key={product.id} product={product} />
               ))}
             </div>
           )}

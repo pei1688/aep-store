@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getCollectionById } from "@/action/collection";
 import { NEW_ARRIVALS_COLLECTION_ID } from "@/config/constants";
-import ProductItem from "@/modules/product/components/product-item";
+import ProductItemOptimized from "@/modules/product/components/product-item-optimized";
 
 const ProductList = async () => {
   const collection = await getCollectionById(NEW_ARRIVALS_COLLECTION_ID);
@@ -20,7 +20,7 @@ const ProductList = async () => {
       </div>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {collection.productCollections.map((pc) => (
-          <ProductItem product={pc.product} key={pc.id} />
+          <ProductItemOptimized product={pc.product} key={pc.id} />
         ))}
       </div>
     </section>
