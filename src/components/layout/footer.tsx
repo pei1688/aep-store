@@ -23,7 +23,7 @@ export default function Footer() {
         <Link
           href="/"
           aria-label="go home"
-          className="ae-footer-title mx-auto flex size-fit items-center gap-2"
+          className="ae-body mx-auto flex size-fit items-center gap-2 text-white"
         >
           <Image src={"/logo.png"} alt="logo" width={30} height={30} />
           AEp Store
@@ -31,7 +31,7 @@ export default function Footer() {
         <div className="my-8 flex flex-wrap justify-center gap-6">
           {links.map((link, index) => (
             <Link key={index} href={link.href}>
-              <span className="ae-footer-content">{link.title}</span>
+              <span className="ae-capton text-white">{link.title}</span>
             </Link>
           ))}
         </div>
@@ -41,7 +41,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="text-background2 hover:text-primary block"
+            className="ae-body block text-white"
           >
             <svg
               className="size-6"
@@ -61,7 +61,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Threads"
-            className="text-background2 hover:text-primary block"
+            className="ae-body block text-white"
           >
             <svg
               className="size-6"
@@ -86,7 +86,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="text-background2 hover:text-primary block"
+            className="ae-body block text-white"
           >
             <svg
               className="size-6"
@@ -106,7 +106,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
-            className="text-background2 hover:text-primary block"
+            className="ae-body block text-white"
           >
             <svg
               className="size-6"
@@ -122,7 +122,7 @@ export default function Footer() {
             </svg>
           </Link>
         </div>
-        <span className="ae-footer-content block text-center">
+        <span className="ae-capton block text-center text-white">
           {" "}
           © {new Date().getFullYear()} aep-store, All rights reserved
         </span>

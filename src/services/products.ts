@@ -6,8 +6,7 @@ import {
   type ProductFilterParams,
   type FilteredProductsResult,
 } from "@/action/product";
-import { GetProducts } from "@/modules/product/ui/views/proeduct-content";
-import { RelatedProductProps } from "@/types/product/product";
+import { GetProducts, RelatedProductProps } from "@/types/product/product";
 import { Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -80,6 +79,7 @@ interface UseFilteredProductsOptions
   extends Omit<ProductFilterParams, "collectionId"> {
   collectionId: string;
   enabled?: boolean;
+  initialData: any;
 }
 
 export const useFilteredProductsByCollection = ({
@@ -90,62 +90,63 @@ export const useFilteredProductsByCollection = ({
   sortBy,
   page,
   limit,
+  initialData,
   enabled = true,
 }: UseFilteredProductsOptions) => {
-  const { data, isError, isPending } =
-    useQuery<FilteredProductsResult>({
-      queryKey: [
-        "filteredProducts",
-        collectionId,
-        categorySlug,
-        categories,
-        brands,
-        sortBy,
-        page,
-        limit,
-      ],
-      queryFn: async () => {
-        // 優先使用 API 路由以獲得更好的緩存效果
-        try {
-          const params = new URLSearchParams({
-            collectionId,
-            ...(categorySlug && { categorySlug }),
-            ...(categories?.length && { categories: categories.join(",") }),
-            ...(brands?.length && { brands: brands.join(",") }),
-            ...(sortBy && { sortBy }),
-            ...(page && { page: page.toString() }),
-            ...(limit && { limit: limit.toString() }),
-          });
+  const { data, isError, isPending } = useQuery<FilteredProductsResult>({
+    queryKey: [
+      "filteredProducts",
+      collectionId,
+      categorySlug,
+      categories,
+      brands,
+      sortBy,
+      page,
+      limit,
+    ],
+    initialData,
+    queryFn: async () => {
+      // 優先使用 API 路由以獲得更好的緩存效果
+      try {
+        const params = new URLSearchParams({
+          collectionId,
+          ...(categorySlug && { categorySlug }),
+          ...(categories?.length && { categories: categories.join(",") }),
+          ...(brands?.length && { brands: brands.join(",") }),
+          ...(sortBy && { sortBy }),
+          ...(page && { page: page.toString() }),
+          ...(limit && { limit: limit.toString() }),
+        });
 
-          const response = await fetch(`/api/products/filtered?${params}`);
+        const response = await fetch(`/api/products/filtered?${params}`);
 
-          if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
-          }
-
-          return await response.json();
-        } catch (error) {
-          console.warn("API 路由失敗，回退到直接調用:", error);
-          // 回退到直接調用 server action
-          return getFilteredProductsByCollection({
-            collectionId,
-            categorySlug,
-            categories,
-            brands,
-            sortBy,
-            page,
-            limit,
-          });
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
         }
-      },
-      enabled: enabled && !!collectionId,
-      staleTime: 1000 * 60 * 5, // 5分鐘緩存
-      gcTime: 1000 * 60 * 10, // 10分鐘垃圾回收
-      retry: (failureCount, error) => {
-        // 對於網絡錯誤重試，但不超過2次
-        return failureCount < 2;
-      },
-    });
+
+        return await response.json();
+      } catch (error) {
+        console.warn("API 路由失敗，回退到直接調用:", error);
+        // 回退到直接調用 server action
+        return getFilteredProductsByCollection({
+          collectionId,
+          categorySlug,
+          categories,
+          brands,
+          sortBy,
+          page,
+          limit,
+        });
+      }
+    },
+    enabled: enabled && !!collectionId,
+    staleTime: 1000 * 60 * 5, // 5分鐘緩存
+    gcTime: 1000 * 60 * 10, // 10分鐘垃圾回收
+    retry: (failureCount, error) => {
+      // 對於網絡錯誤重試，但不超過2次
+      return failureCount < 2;
+    },
+  });
 
   return {
     data,

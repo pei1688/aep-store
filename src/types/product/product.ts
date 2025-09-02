@@ -1,4 +1,11 @@
-import { Category, Collection, Product, ProductVariant } from "@prisma/client";
+import { getProduct } from "@/action/product";
+import {
+  Category,
+  Collection,
+  Prisma,
+  Product,
+  ProductVariant,
+} from "@prisma/client";
 
 // ProductWithCategory
 export type ProductWithCategory = Product & {
@@ -34,3 +41,5 @@ export interface RelatedProductProps {
   categoryId: string;
   productId: string;
 }
+
+export type GetProducts = Prisma.PromiseReturnType<typeof getProduct>;

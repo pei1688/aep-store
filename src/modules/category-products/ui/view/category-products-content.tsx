@@ -14,7 +14,6 @@ import {
   buildUpdatedSort,
 } from "@/lib/filter";
 import DesktopFilters from "../../components/desktop-filters";
-import PageBreadcrumb from "@/components/layout/page-breadcrumb";
 
 const MobileFilters = dynamic(
   () => import("@/modules/category-products/components/mobile-filters"),
@@ -23,11 +22,13 @@ const MobileFilters = dynamic(
 interface CategoryProductsContentProps {
   collectionId: string;
   categorySlug?: string;
+  initialData: any;
 }
 
 const CategoryProductsContent = ({
   collectionId,
   categorySlug,
+  initialData,
 }: CategoryProductsContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -58,6 +59,7 @@ const CategoryProductsContent = ({
   const { data, isPending, isError } = useFilteredProductsByCollection({
     collectionId,
     ...filterParams,
+    initialData,
   });
 
   const {
@@ -116,21 +118,7 @@ const CategoryProductsContent = ({
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="mb-6">
-        {collectionInfo && (
-          <PageBreadcrumb
-            grandparentPage={{
-              name: "商品系列",
-              href: `/collections`,
-            }}
-            parentPage={{
-              name: collectionInfo.name,
-              href: `/collections/${collectionInfo.id}/全部`,
-            }}
-          />
-        )}
-      </div>
+    <>
       <div className="mb-8 flex flex-col justify-between md:flex-row md:items-center">
         {/* 頁面標題 */}
         <PageHeader
@@ -190,7 +178,7 @@ const CategoryProductsContent = ({
         onFilterChange={updateFilter}
         onSortChange={updateSort}
       />
-    </div>
+    </>
   );
 };
 
