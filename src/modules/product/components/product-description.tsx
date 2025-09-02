@@ -21,10 +21,10 @@ interface ProductDesProps {
 
 const ProductDescription = ({ description }: ProductDesProps) => {
   return (
-    <div className="mb-32 flex flex-col md:px-0 px-6">
-      <div className="ae-des-title mb-8">商品資訊</div>
+    <div className="mb-32 flex flex-col px-6 md:px-0">
+      <div className="ae-section-title mb-8">商品資訊</div>
       {/*商品描述*/}
-      <div className="[&_.ql-container]:!border-none [&_.ql-editor]:!p-0 [&_.ql-toolbar]:hidden ">
+      <div className="ae-body [&_.ql-container]:!border-none [&_.ql-editor]:!p-0 [&_.ql-toolbar]:hidden">
         <ReactQuill
           theme="snow"
           value={description}

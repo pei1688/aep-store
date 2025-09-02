@@ -91,7 +91,7 @@ export default function CheckoutSuccessPage() {
           <h1 className="mb-2 text-3xl font-bold text-neutral-900">
             訂單建立成功！
           </h1>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             訂單編號：
             <span className="font-mono font-semibold">{order.id}</span>
           </p>
@@ -115,7 +115,7 @@ export default function CheckoutSuccessPage() {
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">訂單狀態</span>
+                <span className="text-neutral-600">訂單狀態</span>
                 <Badge className={orderStatusInfo.color}>
                   {orderStatusInfo.icon}
                   <span className="ml-2">{orderStatusInfo.text}</span>

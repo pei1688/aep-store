@@ -34,7 +34,7 @@ const OrderContent = () => {
 
   if (error || !orders) {
     return (
-      <div className="flex min-h-64 flex-col items-center justify-center text-gray-500">
+      <div className="flex min-h-64 flex-col items-center justify-center text-neutral-500">
         <Package className="mb-4 h-16 w-16 opacity-50" />
         <p className="text-lg">尚無訂單記錄</p>
         <p className="text-sm">您還沒有任何訂單，快去購物吧！</p>
@@ -59,11 +59,11 @@ const OrderContent = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Package className="text-primary h-5 w-5" />
-                <h3 className="font-semibold text-gray-800">
+                <h3 className="font-semibold text-neutral-800">
                   訂單編號: {orders.orderItems[0]?.orderId || "未知"}
                 </h3>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <div className="flex items-center space-x-2 text-sm text-neutral-600">
                 <Calendar className="h-4 w-4" />
                 <span>{formatDate(orders.orderItems[0]?.createdAt)}</span>
               </div>

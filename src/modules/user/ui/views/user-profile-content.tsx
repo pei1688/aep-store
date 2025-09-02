@@ -29,7 +29,7 @@ const UserProfileContent = ({ profile }: UserProfileProps) => {
 
   return (
     <>
-      <h1 className="ae-profile-title mb-4">個人資訊</h1>
+      <h1 className="ae-home-title mb-4">個人資訊</h1>
       <div className="ae-caption">管理關於登入帳號，使用者資料的設定</div>
       <Separator className="bg-primary/20 mx-auto mt-8 max-w-7xl" />
       {/*會員資料*/}

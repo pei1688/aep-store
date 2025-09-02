@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { useAddressStore } from "@/store/address-store";
 import { Edit2, Trash2 } from "lucide-react";
 
@@ -31,19 +32,19 @@ const AddressCard = ({ address }: AddressCardProps) => {
   };
 
   return (
-    <div className="group relative h-[200px] w-full cursor-pointer rounded-lg border bg-neutral-50 p-4 shadow-sm transition-all hover:shadow-md">
+    <div className="group ae-caption relative h-[200px] w-full cursor-pointer rounded-lg border bg-neutral-50 p-4 shadow-sm transition-all hover:shadow-md">
       <div className="flex h-full flex-col justify-between">
         <div className="space-y-2">
-          <h3 className="font-medium text-gray-900">{address.recipientName}</h3>
-          <p className="mt-1 text-sm text-gray-600">{address.phoneNumber}</p>
-          <p className="mt-2 text-sm text-gray-600">
+          <h3 className="ae-body">{address.recipientName}</h3>
+          <p className="mt-1">{address.phoneNumber}</p>
+          <p className="mt-2">
             {address.zipCode} {address.county}
             {address.district}
           </p>
-          <p className="text-sm text-gray-600">{address.streetAddress}</p>
+          <p>{address.streetAddress}</p>
         </div>
         {address.isDefault && (
-          <span className="inline-block w-fit rounded-full bg-[#b832801f] px-2 py-1 text-xs text-[#B83280]">
+          <span className="ae-small inline-block w-fit rounded-full bg-fuchsia-100 px-2 py-1 text-fuchsia-600">
             預設地址
           </span>
         )}
@@ -52,19 +53,20 @@ const AddressCard = ({ address }: AddressCardProps) => {
       <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         <button
           onClick={handleEditClick}
-          className="rounded-full bg-white/80 p-1.5 shadow-sm transition-colors hover:bg-sky-700/10"
+          className="rounded-full bg-white/80 px-3 py-2 shadow-sm transition-colors hover:bg-sky-700/10"
           title="編輯地址"
         >
           <Edit2 className="size-4 text-sky-700" />
         </button>
         {!address.isDefault && (
-          <button
+          <Button
             onClick={handleDeleteClick}
-            className="rounded-full bg-white/80 p-1.5 shadow-sm transition-colors hover:bg-red-50"
+            className="rounded-full p-1.5 shadow-sm transition-colors"
             title="刪除地址"
+            variant={"default"}
           >
-            <Trash2 className="text-destructive size-4" />
-          </button>
+            <Trash2 className="text-white size-4" />
+          </Button>
         )}
       </div>
     </div>

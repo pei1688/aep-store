@@ -21,11 +21,11 @@ const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
   }
 
   if (error) {
-    return <div className="text-gray-500">推薦商品載入失敗</div>;
+    return <div className="text-neutral-500">推薦商品載入失敗</div>;
   }
 
   if (!products || products.length === 0) {
-    return <div className="text-gray-500">敬請期待</div>;
+    return <div className="text-neutral-500">敬請期待</div>;
   }
 
   return (

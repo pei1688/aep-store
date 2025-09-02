@@ -40,9 +40,9 @@ const MobileUser = ({ session, closeSheet, authClient }: MobileUserProps) => {
             key={item.label}
             href={session ? item.href : "/sign-in"}
             onClick={closeSheet}
-            className="flex items-center gap-3 rounded-lg px-12 py-4 transition-colors hover:bg-gray-50"
+            className="flex items-center gap-3 rounded-lg px-12 py-4 transition-colors hover:bg-neutral-50"
           >
-            <item.icon className="size-4 text-gray-600" />
+            <item.icon className="size-4 text-neutral-600" />
             <span className="text-lg">{item.label}</span>
           </Link>
         ))}

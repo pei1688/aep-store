@@ -42,9 +42,9 @@ export const getPaymentStatusInfo = (paymentStatus: string) => {
       };
     default:
       return {
-        icon: <Clock className="h-5 w-5 text-gray-600" />,
+        icon: <Clock className="h-5 w-5 text-neutral-600" />,
         text: "未知狀態",
-        color: "bg-gray-100 text-gray-800",
+        color: "bg-neutral-100 text-neutral-800",
       };
   }
 };
@@ -98,9 +98,9 @@ export const getOrderStatusInfo = (status: string) => {
       };
     default:
       return {
-        icon: <Clock className="h-5 w-5 text-gray-600" />,
+        icon: <Clock className="h-5 w-5 text-neutral-600" />,
         text: "未知狀態",
-        color: "bg-gray-100 text-gray-800",
+        color: "bg-neutral-100 text-neutral-800",
       };
   }
 };

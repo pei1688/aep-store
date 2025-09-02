@@ -26,6 +26,8 @@ interface ExtendedProductVariant {
 interface ExtendedProductWithCategory
   extends Omit<ProductWithCategory, "variants"> {
   variants?: ExtendedProductVariant[];
+  isOnSale: boolean;
+  discountPercentage: number | null;
 }
 
 export interface ProductDetailProps {

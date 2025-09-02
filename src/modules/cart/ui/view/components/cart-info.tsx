@@ -23,7 +23,7 @@ export const CartInfo = ({
   return (
     <div className="ae-cart-total mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-neutral-600">
           已選擇 {selectedCount} 件商品
         </span>
       </div>

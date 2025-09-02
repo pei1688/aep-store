@@ -76,7 +76,7 @@ const NavbarUser = () => {
                 <Button
                   variant="ghost"
                   onClick={handleSignOut}
-                  className="text-muted-foreground hover:text-accent-foreground mt-4 flex w-full items-center justify-start gap-2 text-sm hover:bg-neutral-700/10"
+                  className="ae-body mt-4 flex w-full items-center justify-start gap-2 text-sm hover:bg-neutral-700/10"
                 >
                   <LogOut className="size-4" />
                   登出
@@ -94,7 +94,7 @@ const NavbarUser = () => {
             <li>
               <Button
                 variant="ghost"
-                className="text-muted-foreground hover:text-accent-foreground mt-4 flex w-full items-center justify-start gap-2 text-sm hover:bg-neutral-700/10"
+                className="ae-body mt-4 flex w-full items-center justify-start gap-2 text-sm hover:bg-neutral-700/10"
                 asChild
               >
                 <Link href="/sign-in">

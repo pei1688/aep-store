@@ -9,17 +9,21 @@ const ProductList = async () => {
   if (!collection) return null;
 
   return (
-    <section className="mx-auto my-16 max-w-7xl px-6 md:px-0">
-      <div className="mt-8 flex items-center justify-between">
-        <h3 className="ae-home-title my-8">新品上市</h3>
-        <Button variant={"link"} className="text-md cursor-pointer" asChild>
-          <Link href={`/collections/${NEW_ARRIVALS_COLLECTION_ID}/${"全部"}`}>
+    <section className="mx-auto flex max-w-7xl flex-col space-y-3 px-6 md:px-0">
+      <div className="flex items-center justify-between">
+        <h3 className="ae-home-title text-center">新品上市</h3>
+        <Button variant="link" asChild>
+          <Link
+            href={`/collections/${NEW_ARRIVALS_COLLECTION_ID}/${"全部"}`}
+            className="ae-caption flex items-center"
+          >
             看更多
           </Link>
         </Button>
       </div>
+      <span className="ae-home-subTitle">新的代購商品上架囉!</span>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-        {collection.productCollections.map((pc) => (
+        {collection.productCollections.slice(0, 4).map((pc) => (
           <ProductItemOptimized product={pc.product} key={pc.id} />
         ))}
       </div>

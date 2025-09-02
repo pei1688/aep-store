@@ -44,7 +44,7 @@ const MobileCollections = ({
             key={col.id}
             href={`/collections/${col.id}/全部`}
             onClick={closeSheet}
-            className="block rounded-lg px-12 text-lg font-medium transition-colors hover:bg-gray-50"
+            className="block rounded-lg px-12 text-lg font-medium transition-colors hover:bg-neutral-50"
           >
             {col.name}
           </Link>

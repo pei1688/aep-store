@@ -19,10 +19,8 @@ const UserSidebar = ({ user }: { user: User }) => {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="md:text-left">
-          <h2 className="ae-body font-semibold">{user.name}</h2>
-          <h3 className="ae-body-secondary text-sm md:text-base">
-            {user.email}
-          </h3>
+          <h2 className="ae-body">{user.name}</h2>
+          <h3 className="ae-caption">{user.email}</h3>
         </div>
       </div>
 

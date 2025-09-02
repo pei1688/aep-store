@@ -1,7 +1,14 @@
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb'; // Adjust the path if needed
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb"; 
 
 interface PageBreadcrumbProps {
-  currentPageName: string;
+  currentPageName?: string;
   parentPage?: { name: string; href: string };
   grandparentPage?: { name: string; href: string };
 }
@@ -37,10 +44,15 @@ const PageBreadcrumb: React.FC<PageBreadcrumbProps> = ({
             </BreadcrumbItem>
           </>
         )}
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{currentPageName}</BreadcrumbPage>
-        </BreadcrumbItem>
+
+        {currentPageName && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{currentPageName}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

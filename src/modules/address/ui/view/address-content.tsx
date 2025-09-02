@@ -18,10 +18,7 @@ const DeleteAddressDialog = dynamic(
 const AddressContent = () => {
   const { data: addressData, isPending } = useQuery({
     queryKey: ["addresses"],
-    queryFn: () =>  getUserAddress(),
-    staleTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    queryFn: () => getUserAddress(),
   });
 
   if (isPending) {

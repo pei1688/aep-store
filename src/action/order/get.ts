@@ -1,17 +1,10 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { headers } from "next/headers";
+import { requireAuth } from "../user";
 
 export const getOrders = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user?.id) {
-    return null;
-  }
+  const session = await requireAuth();
 
   const orders = await prisma.order.findUnique({
     where: {
@@ -29,13 +22,7 @@ export const getOrders = async () => {
 };
 
 export const getOrderById = async (orderId: string) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user?.id) {
-    return null;
-  }
+  const session = await requireAuth();
 
   const order = await prisma.order.findUnique({
     where: {

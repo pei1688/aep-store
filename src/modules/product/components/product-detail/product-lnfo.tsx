@@ -1,48 +1,43 @@
+import { ProductPriceInfo } from "@/hooks/product/use-product-price";
 import { ProductDetailProps } from "@/types/product/product-detail";
 
 interface ProductInfoProps {
   product: ProductDetailProps["product"];
-  finalPrice: number;
+  priceInfo: ProductPriceInfo;
 }
 
-export const ProductInfo = ({ product, finalPrice }: ProductInfoProps) => {
-  // 計算折扣後價格
-  const discountAmount = product.discountPercentage || 0;
-  const salePrice = finalPrice - (finalPrice * discountAmount) / 100;
-
+export const ProductInfo = ({ product, priceInfo }: ProductInfoProps) => {
   return (
-    <div className="flex flex-col space-y-4">
-      <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
-      <h2 className="text-lg text-gray-600">{product.category?.name || ""}</h2>
+    <div className="flex flex-col space-y-2">
+      <h1 className="ae-home-title">{product.name}</h1>
+      <h2 className="ae-home-subTitle">{product.category?.name || ""}</h2>
 
       {/* 價格顯示區域 */}
       <div className="flex flex-col space-y-2">
-        {product.isOnSale ? (
+        {priceInfo.hasDiscount ? (
           <>
             {/* 價格組合 */}
-            <div className="flex items-center space-x-3">
+            <div className="ae-caption flex items-center space-x-3">
               {/* 特價價格 */}
-              <span className="text-destructive text-3xl font-bold">
-                NT${salePrice.toLocaleString()}
+              <span className="font-bold text-fuchsia-600">
+                NT${priceInfo.discountedPrice.toLocaleString()}
               </span>
 
               {/* 原價（劃線） */}
-              <span className="text-xl text-gray-500 line-through">
-                NT${finalPrice.toLocaleString()}
+              <span className="line-through">
+                NT${priceInfo.originalPrice.toLocaleString()}
               </span>
 
               {/* 折扣百分比 */}
-              {product.discountPercentage && (
-                <span className="text-destructive rounded bg-red-100 px-2 py-1 text-sm font-semibold">
-                  -{Math.round(product.discountPercentage)}%
-                </span>
-              )}
+              <span className="font-semibold text-fuchsia-600">
+                {Math.round(priceInfo.discountPercentage)}%折扣
+              </span>
             </div>
           </>
         ) : (
           /* 一般價格 */
-          <div className="text-3xl font-bold text-gray-900">
-            NT${finalPrice.toLocaleString()}
+          <div className="font-bold">
+            NT${priceInfo.finalPrice.toLocaleString()}
           </div>
         )}
       </div>

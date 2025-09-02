@@ -7,8 +7,12 @@ import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/store/cart-store";
 import { ProductDetailProps } from "@/types/product/product-detail";
 import { useProductDetailStore } from "@/store/product-detail-store";
-import { useProductVariants } from "@/hooks/use-product-variants";
-import { useProductStock } from "@/hooks/use-product-stock";
+import { useProductVariants } from "@/hooks/product/use-product-variants";
+import {
+  useVariantStock,
+  useStockValidation,
+  useProductPrice,
+} from "@/hooks/product/use-product-stock";
 import ProductImage from "../product-image";
 import { ProductInfo } from "./product-lnfo";
 import { VariantSelector } from "./variant-selector";
@@ -32,9 +36,14 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
     resetState,
   } = useProductDetailStore();
 
+  //變體、庫存的處裡
   const { groupedVariants } = useProductVariants(product);
-  const { variantInfo, stockValidation, isAllVariantsSelected, finalPrice } =
-    useProductStock(product, groupedVariants);
+  const { variantInfo, isAllVariantsSelected } = useVariantStock(
+    product,
+    groupedVariants,
+  );
+  const stockValidation = useStockValidation(product.id, variantInfo);
+  const priceInfo = useProductPrice(product, variantInfo);
 
   // 檢查並重置狀態 - 當商品ID變化時
   useEffect(() => {
@@ -155,7 +164,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   const createCartItem = () => ({
     productId: product.id,
     name: product.name,
-    price: finalPrice,
+    price: priceInfo.finalPrice,
     image: currentImage,
     quantity,
     selectedVariants,
@@ -195,7 +204,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
         />
 
         <div className="col-span-1 flex w-full flex-col">
-          <ProductInfo product={product} finalPrice={finalPrice} />
+          <ProductInfo product={product} priceInfo={priceInfo} />
 
           <VariantSelector
             groupedVariants={groupedVariants}
@@ -217,7 +226,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
           />
 
           <Separator className="bg-primary/20 my-8" />
-          <div className="ae-des-subContent">
+          <div className="ae-caption">
             *請注意，尺寸可能會有幾公分的輕微偏差。
             <br />
             *我們已盡一切努力確保產品照片盡可能接近實際顏色，但根據您的顯示器設定和房間照明，顏色可能與實際產品有所不同。

@@ -13,10 +13,12 @@ export const useAddressActions = () => {
   const queryClient = useQueryClient();
   const { editingAddress, deletingAddress, closeDialog, closeDeleteDialog } =
     useAddressStore();
-  //重新抓取數據
-  const invalidateAndRefetch = async () => {
-    await queryClient.invalidateQueries({ queryKey: ["addresses"] });
-    await queryClient.refetchQueries({ queryKey: ["addresses"] });
+  // 重新抓取數據 - 只需要 invalidate，React Query 會自動重新獲取
+  const invalidateQueries = async () => {
+    await queryClient.invalidateQueries({ 
+      queryKey: ["addresses"],
+      refetchType: "active" // 只重新獲取當前活躍的查詢
+    });
   };
   // 新增地址
   const addMutation = useMutation({
@@ -28,10 +30,9 @@ export const useAddressActions = () => {
       return createUserAddress(formData);
     },
     onSuccess: async (response) => {
-      console.log("Mutation succeeded, invalidating queries");
       if (response.success) {
         toast.success(response.message);
-        await invalidateAndRefetch();
+        await invalidateQueries();
         closeDialog();
       } else {
         toast.error(response.message || "新增地址失敗");
@@ -58,7 +59,7 @@ export const useAddressActions = () => {
     onSuccess: async (response) => {
       if (response.success) {
         toast.success(response.message);
-        await invalidateAndRefetch();
+        await invalidateQueries();
         closeDialog();
       } else {
         toast.error(response.message || "更新地址失敗");
@@ -80,7 +81,7 @@ export const useAddressActions = () => {
     onSuccess: async (response) => {
       if (response.success) {
         toast.success(response.message);
-        await invalidateAndRefetch();
+        await invalidateQueries();
         closeDeleteDialog();
       } else {
         toast.error(response.message || "刪除地址失敗");

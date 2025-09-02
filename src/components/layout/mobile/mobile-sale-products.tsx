@@ -64,7 +64,7 @@ const MobileSaleProducts = ({
             </Link>
           ))
         ) : (
-          <div className="text-gray-100">尚無商品</div>
+          <div className="text-neutral-100">尚無商品</div>
         )}
       </div>
     </>

@@ -18,6 +18,7 @@ export async function getCollectionById(collectionId: string) {
                 name: true,
                 price: true,
                 imgUrl: true,
+                isOnSale: true,
                 category: {
                   select: {
                     id: true,

@@ -12,6 +12,8 @@ export type ProductListItem = {
   name: string;
   price: number;
   imgUrl: string[];
+  isOnSale: boolean;
+  discountPercentage?: number | null;
   category: {
     id: string;
     name: string;

@@ -1,0 +1,197 @@
+"use client";
+import { useState, useMemo, useRef } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useFilteredProductsByCollection } from "@/services/products";
+import PageHeader from "@/modules/category-products/components/page-header";
+import Toolbar from "@/modules/category-products/components/toolbar";
+import ProductGrid from "@/modules/category-products/components/product-grid";
+import LoadingOverlay from "@/modules/category-products/components/loading-overlay";
+import ProductPagination from "@/modules/category-products/components/product-pagination";
+import dynamic from "next/dynamic";
+import {
+  buildClearedFilters,
+  buildUpdatedFilters,
+  buildUpdatedSort,
+} from "@/lib/filter";
+import DesktopFilters from "../../components/desktop-filters";
+import PageBreadcrumb from "@/components/layout/page-breadcrumb";
+
+const MobileFilters = dynamic(
+  () => import("@/modules/category-products/components/mobile-filters"),
+  { ssr: false },
+);
+interface CategoryProductsContentProps {
+  collectionId: string;
+  categorySlug?: string;
+}
+
+const CategoryProductsContent = ({
+  collectionId,
+  categorySlug,
+}: CategoryProductsContentProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // 保存上一次成功獲取的 availableFilters，避免過濾時消失
+  const lastAvailableFilters = useRef<{
+    categories: string[];
+    brands: string[];
+  }>({ categories: [], brands: [] });
+
+  // 保存上一次成功獲取的商品數據，用於過濾時顯示
+  const lastProducts = useRef<any[]>([]);
+
+  // 解析 URL 參數
+  const filterParams = useMemo(() => {
+    const categories =
+      searchParams.get("categories")?.split(",").filter(Boolean) || [];
+    const brands = searchParams.get("brands")?.split(",").filter(Boolean) || [];
+    const sortBy = searchParams.get("sortBy") || "newest";
+    const page = parseInt(searchParams.get("page") || "1", 10);
+
+    return { categorySlug, categories, brands, sortBy, page, limit: 5 };
+  }, [searchParams, categorySlug]);
+
+  // 獲取過濾後的產品數據
+  const { data, isPending, isError } = useFilteredProductsByCollection({
+    collectionId,
+    ...filterParams,
+  });
+
+  const {
+    products = [],
+    totalCount = 0,
+    totalPages = 1,
+    collectionInfo,
+  } = data || {};
+
+  // 更新 lastAvailableFilters 和 lastProducts，但只在數據成功獲取時
+  if (data?.availableFilters && !isPending) {
+    lastAvailableFilters.current = data.availableFilters;
+  }
+  if (data?.products && !isPending) {
+    lastProducts.current = data.products;
+  }
+
+  // 決定要顯示的商品：過濾時顯示上一次的商品，否則顯示當前商品
+  const displayProducts = isPending ? lastProducts.current : products;
+
+  // 更新過濾器
+  const updateFilter = (
+    type: "categories" | "brands",
+    value: string,
+    checked: boolean,
+  ) => {
+    const query = buildUpdatedFilters(searchParams, type, value, checked);
+    router.push(`${pathname}?${query}`);
+  };
+
+  // 更新排序
+  const updateSort = (sortBy: string) => {
+    const query = buildUpdatedSort(searchParams, sortBy);
+    router.push(`${pathname}?${query}`);
+  };
+
+  // 清除所有過濾器
+  const clearFilters = () => {
+    const query = buildClearedFilters(filterParams);
+    router.push(`${pathname}${query ? `?${query}` : ""}`);
+  };
+
+  // 頁面變更處理
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  if (isError) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <p className="text-neutral-500">載入失敗，請重試</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8">
+      <div className="mb-6">
+        {collectionInfo && (
+          <PageBreadcrumb
+            grandparentPage={{
+              name: "商品系列",
+              href: `/collections`,
+            }}
+            parentPage={{
+              name: collectionInfo.name,
+              href: `/collections/${collectionInfo.id}/全部`,
+            }}
+          />
+        )}
+      </div>
+      <div className="mb-8 flex flex-col justify-between md:flex-row md:items-center">
+        {/* 頁面標題 */}
+        <PageHeader
+          categorySlug={categorySlug}
+          totalCount={totalCount}
+          isPending={isPending}
+          activeFilters={{
+            categories: filterParams.categories,
+            brands: filterParams.brands,
+          }}
+        />
+        {/* 上方工具欄 */}
+        <Toolbar
+          sortBy={filterParams.sortBy}
+          onSortChange={updateSort}
+          onShowMobileFilters={() => setShowMobileFilters(true)}
+        />
+      </div>
+
+      <div className="flex gap-8">
+        {/* 左側過濾欄 - 桌面版 */}
+        <DesktopFilters
+          filterParams={filterParams}
+          lastAvailableFilters={lastAvailableFilters.current}
+          onClearFilters={clearFilters}
+          onFilterChange={updateFilter}
+          isPending={isPending}
+        />
+
+        {/* 右側商品區域 */}
+        <div className="flex-1">
+          {/* 商品網格 */}
+          <div className="relative">
+            {/* 過濾時的遮罩層 */}
+            <LoadingOverlay isVisible={isPending} />
+
+            {/* 商品內容 */}
+            <ProductGrid products={displayProducts} isPending={isPending} />
+          </div>
+
+          {/* 分頁組件 */}
+          <ProductPagination
+            currentPage={filterParams.page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+
+      {/* 移動端過濾器彈窗 */}
+      <MobileFilters
+        showMobileFilters={showMobileFilters}
+        filterParams={filterParams}
+        lastAvailableFilters={lastAvailableFilters.current}
+        onClose={() => setShowMobileFilters(false)}
+        onClearFilters={clearFilters}
+        onFilterChange={updateFilter}
+        onSortChange={updateSort}
+      />
+    </div>
+  );
+};
+
+export default CategoryProductsContent;

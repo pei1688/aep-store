@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { z } from "zod";
 import FormInput from "@/components/form/form-input";
-import { useEffect } from "react";
 
 type Address = {
   id: string;
@@ -64,7 +63,7 @@ const AddressForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormInput
           control={form.control}
           name="recipientName"

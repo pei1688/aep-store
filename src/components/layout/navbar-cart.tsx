@@ -39,7 +39,7 @@ const NavbarCart = () => {
     updateQuantity(itemId, newQuantity);
   };
   return (
-    <NavigationMenuItem className="">
+    <NavigationMenuItem>
       <NavigationMenuTrigger className="relative">
         <Link href={"/cart"}>
           <ShoppingCart className="size-6 hover:text-neutral-600" />
@@ -81,7 +81,7 @@ const NavbarCart = () => {
                   <div className="min-w-0 flex-1">
                     <h4 className="truncate font-medium">{item.name}</h4>
                     {item.variantText && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-neutral-500">
                         {item.variantText}
                       </p>
                     )}
@@ -89,7 +89,7 @@ const NavbarCart = () => {
                     {/* 庫存狀態提示 */}
                     {isMaxStock(item) && (
                       <p
-                        className={`text-fuchsia-700 text-xs transition-opacity duration-200 ${
+                        className={`text-xs text-fuchsia-700 transition-opacity duration-200 ${
                           isMaxStock(item)
                             ? "visible opacity-100"
                             : "invisible opacity-0"

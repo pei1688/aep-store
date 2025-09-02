@@ -26,7 +26,7 @@ const DeleteAddressDialog = () => {
           <AlertDialogDescription>
             您確定要刪除「{deletingAddress?.recipientName}」的收貨地址嗎？
             <br />
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-neutral-500">
               {deletingAddress?.county}
               {deletingAddress?.district} {deletingAddress?.streetAddress}
             </span>

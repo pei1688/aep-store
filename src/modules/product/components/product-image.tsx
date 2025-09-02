@@ -29,7 +29,6 @@ const ProductImage = ({
     }
   };
 
-
   return (
     <div className="col-span-2 flex flex-col items-center">
       {/* 大圖片區域 */}
@@ -66,8 +65,8 @@ const ProductImage = ({
               alt={`${name} - 圖片 ${index + 1}`}
               className={`cursor-pointer rounded-sm border-2 object-cover transition ${
                 image === img
-                  ? "border-fuchsia-500"
-                  : "border-transparent hover:border-fuchsia-500/30"
+                  ? "border-neutral-700"
+                  : "border-transparent hover:border-neutral-700/30"
               }`}
               onClick={() => handleImageChange(img)}
               fill

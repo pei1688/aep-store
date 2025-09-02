@@ -18,11 +18,11 @@ export const VariantSelector = ({
   const { selectedVariants, selectedSpec2 } = useProductDetailStore();
 
   return (
-    <div className="ae-des-content mt-10 space-y-4">
+    <div className="ae-des-content ae-body mt-10 space-y-4">
       {/* 規格1選擇 */}
       {Object.entries(groupedVariants).map(([specName, variants]) => (
         <div key={specName} className="flex items-center gap-4">
-          <span>{specName}:</span>
+          <p>{specName}:</p>
           <div className="flex flex-wrap items-center gap-4">
             {variants.map((variant) => {
               const isSelected = selectedVariants[specName] === variant.id;
@@ -33,11 +33,11 @@ export const VariantSelector = ({
                   onClick={() => onVariantSelect(specName, variant)}
                   className={`rounded-md border px-3 py-2 transition-colors ${
                     isSelected
-                      ? "border-fuchsia-700 bg-fuchsia-700/10"
-                      : "border-gray-300 hover:border-fuchsia-700"
+                      ? "border-fuchsia-700"
+                      : "border-neutral-300 hover:border-fuchsia-700"
                   }`}
                 >
-                  <p className="ae-des-content">{variant.spec1Value}</p>
+                  <p>{variant.spec1Value}</p>
                 </Button>
               );
             })}
@@ -52,7 +52,7 @@ export const VariantSelector = ({
 
         return (
           <div key={`spec2-${variantId}`} className="flex items-center gap-4">
-            <span>{variant.spec2Combinations[0]?.spec2Name}:</span>
+            <p>{variant.spec2Combinations[0]?.spec2Name}:</p>
             <div className="flex flex-wrap items-center gap-4">
               {variant.spec2Combinations.map((spec2) => {
                 const isSelected = selectedSpec2[variantId] === spec2.id;
@@ -63,11 +63,11 @@ export const VariantSelector = ({
                     onClick={() => onSpec2Select(variantId, spec2)}
                     className={`rounded-md border px-3 py-2 transition-colors ${
                       isSelected
-                        ? "border-fuchsia-700 bg-fuchsia-700/10"
-                        : "border-gray-300 hover:border-fuchsia-700"
+                        ? "border-fuchsia-700"
+                        : "border-neutral-300 hover:border-fuchsia-700"
                     }`}
                   >
-                    <p className="ae-des-content">{spec2.spec2Value}</p>
+                    <p>{spec2.spec2Value}</p>
                   </Button>
                 );
               })}

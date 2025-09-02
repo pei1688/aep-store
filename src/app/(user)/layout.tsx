@@ -1,20 +1,12 @@
-import { auth } from "@/lib/auth";
+import { requireAuth } from "@/action/user";
 import UserSidebar from "@/modules/user/components/user-sidebar";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function UserLayoutFlexbox({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    return redirect("/sign-in");
-  }
+  const session = await requireAuth();
 
   return (
     <div className="mt-16 flex flex-col items-center justify-center md:mt-32">

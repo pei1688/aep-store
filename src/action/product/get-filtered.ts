@@ -48,15 +48,15 @@ export async function getFilteredProductsByCollection({
   brands = [],
   sortBy = "newest",
   page = 1,
-  limit = 4,
+  limit = 12,
 }: ProductFilterParams): Promise<FilteredProductsResult> {
   try {
-  
     // 首先獲取集合信息
     const collection = await prisma.collection.findUnique({
       where: { id: collectionId },
       select: { id: true, name: true, slug: true },
     });
+    
     if (!collection) {
       throw new Error("Collection not found");
     }
@@ -73,7 +73,6 @@ export async function getFilteredProductsByCollection({
     // 添加分類過濾
     if (categorySlug) {
       const decodedCategorySlug = decodeURIComponent(categorySlug);
-      // 只有當解碼後的分類不是 "全部" 時才添加分類過濾
       if (decodedCategorySlug !== "全部") {
         baseWhere.category = {
           name: decodedCategorySlug,
@@ -82,7 +81,6 @@ export async function getFilteredProductsByCollection({
     }
 
     // 添加多分類過濾（來自 URL 參數）
-    // 注意：如果有 categories 參數，它會覆蓋 categorySlug 的過濾
     if (categories.length > 0) {
       baseWhere.category = {
         name: {

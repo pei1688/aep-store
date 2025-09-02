@@ -8,26 +8,26 @@ import FadeIn from "@/components/fadein";
 
 const HomePage = async () => {
   return (
-    <div className="w-full">
+    <div className="flex w-full flex-col space-y-12">
       <FadeIn>
         <Hero />
       </FadeIn>
 
-      <FadeIn delay={0.2}>
+      <FadeIn delay={0.3}>
         <Suspense fallback={"loading..."}>
           <ProductList />
         </Suspense>
       </FadeIn>
 
-      <Separator className="bg-primary/20 mx-auto mt-8 max-w-7xl " />
+      <Separator className="mx-auto max-w-7xl bg-neutral-500/20" />
 
-      <FadeIn delay={0.2}>
+      <FadeIn delay={0.4}>
         <Suspense fallback={"loading..."}>
           <Collections />
         </Suspense>
       </FadeIn>
 
-      <FadeIn delay={0.2}>
+      <FadeIn delay={0.5}>
         <Brand />
       </FadeIn>
     </div>

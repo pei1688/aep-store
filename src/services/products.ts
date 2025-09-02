@@ -76,7 +76,8 @@ export const useRelatedProducts = ({
 };
 
 //🔸 使用後端過濾的產品查詢
-interface UseFilteredProductsOptions extends Omit<ProductFilterParams, 'collectionId'> {
+interface UseFilteredProductsOptions
+  extends Omit<ProductFilterParams, "collectionId"> {
   collectionId: string;
   enabled?: boolean;
 }
@@ -86,29 +87,15 @@ export const useFilteredProductsByCollection = ({
   categorySlug,
   categories,
   brands,
-  sortBy = "newest",
-  page = 1,
-  limit = 4,
+  sortBy,
+  page,
+  limit,
   enabled = true,
 }: UseFilteredProductsOptions) => {
-  const {
-    data,
-    isError,
-    isPending,
-    error,
-  } = useQuery<FilteredProductsResult>({
-    queryKey: [
-      "filteredProducts",
-      collectionId,
-      categorySlug,
-      categories,
-      brands,
-      sortBy,
-      page,
-      limit,
-    ],
-    queryFn: () =>
-      getFilteredProductsByCollection({
+  const { data, isError, isPending } =
+    useQuery<FilteredProductsResult>({
+      queryKey: [
+        "filteredProducts",
         collectionId,
         categorySlug,
         categories,
@@ -116,26 +103,53 @@ export const useFilteredProductsByCollection = ({
         sortBy,
         page,
         limit,
-      }),
-    enabled: enabled && !!collectionId,
-    staleTime: 1000 * 60 * 5, // 5分鐘緩存
-    gcTime: 1000 * 60 * 10, // 10分鐘垃圾回收時間
-    refetchOnWindowFocus: false, // 避免視窗焦點變化時重新獲取
-    retry: 1, // 減少重試次數
-  });
+      ],
+      queryFn: async () => {
+        // 優先使用 API 路由以獲得更好的緩存效果
+        try {
+          const params = new URLSearchParams({
+            collectionId,
+            ...(categorySlug && { categorySlug }),
+            ...(categories?.length && { categories: categories.join(",") }),
+            ...(brands?.length && { brands: brands.join(",") }),
+            ...(sortBy && { sortBy }),
+            ...(page && { page: page.toString() }),
+            ...(limit && { limit: limit.toString() }),
+          });
+
+          const response = await fetch(`/api/products/filtered?${params}`);
+
+          if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.warn("API 路由失敗，回退到直接調用:", error);
+          // 回退到直接調用 server action
+          return getFilteredProductsByCollection({
+            collectionId,
+            categorySlug,
+            categories,
+            brands,
+            sortBy,
+            page,
+            limit,
+          });
+        }
+      },
+      enabled: enabled && !!collectionId,
+      staleTime: 1000 * 60 * 5, // 5分鐘緩存
+      gcTime: 1000 * 60 * 10, // 10分鐘垃圾回收
+      retry: (failureCount, error) => {
+        // 對於網絡錯誤重試，但不超過2次
+        return failureCount < 2;
+      },
+    });
 
   return {
     data,
-    products: data?.products || [],
-    totalCount: data?.totalCount || 0,
-    totalPages: data?.totalPages || 0,
-    currentPage: data?.currentPage || 1,
-    hasNextPage: data?.hasNextPage || false,
-    hasPreviousPage: data?.hasPreviousPage || false,
-    availableFilters: data?.availableFilters || { categories: [], brands: [] },
-    collectionInfo: data?.collectionInfo || null,
     isError,
     isPending,
-    error,
   };
 };

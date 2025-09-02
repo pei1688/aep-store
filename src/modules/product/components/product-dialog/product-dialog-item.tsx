@@ -5,8 +5,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useProductStock } from "@/hooks/use-product-stock";
-import { useProductVariants } from "@/hooks/use-product-variants";
+import {
+  useVariantStock,
+  useStockValidation,
+  useProductPrice,
+} from "@/hooks/product/use-product-stock";
+import { useProductVariants } from "@/hooks/product/use-product-variants";
 import { useCartStore } from "@/store/cart-store";
 import { useProductDetailStore } from "@/store/product-detail-store";
 import { ShoppingCart } from "lucide-react";
@@ -73,8 +77,14 @@ const ProductDialogDetail = ({ product }: ProductDetailProps) => {
   } = useProductDetailStore();
   const router = useRouter();
   const { groupedVariants } = useProductVariants(product);
-  const { variantInfo, stockValidation, isAllVariantsSelected, finalPrice } =
-    useProductStock(product, groupedVariants);
+
+  // 使用分離的 hooks 來獲得更清晰的功能分離
+  const { variantInfo, isAllVariantsSelected } = useVariantStock(
+    product,
+    groupedVariants,
+  );
+  const stockValidation = useStockValidation(product.id, variantInfo);
+  const priceInfo = useProductPrice(product, variantInfo);
 
   useEffect(() => {
     if (product.imgUrl?.[0]) {
@@ -142,7 +152,7 @@ const ProductDialogDetail = ({ product }: ProductDetailProps) => {
   const createCartItem = () => ({
     productId: product.id,
     name: product.name,
-    price: finalPrice,
+    price: priceInfo.finalPrice,
     image: currentImage,
     quantity,
     selectedVariants,
@@ -176,7 +186,12 @@ const ProductDialogDetail = ({ product }: ProductDetailProps) => {
           altText={product.name}
         />
         <div className="flex flex-col">
-          <ProductDialogHeader name={product.name} price={finalPrice} />
+          <ProductDialogHeader
+            name={product.name}
+            price={priceInfo.finalPrice}
+            isOnSale={product.isOnSale}
+            discountPercentage={product.discountPercentage}
+          />
           <Separator className="my-4" />
           <div className="flex-grow">
             <VariantSelector

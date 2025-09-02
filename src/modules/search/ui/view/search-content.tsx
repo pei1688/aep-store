@@ -1,7 +1,7 @@
 "use client";
 
 import Spinner from "@/components/spinner";
-import useSearch from "@/hooks/use-search";
+import { useSearch } from "@/hooks/use-search";
 import ProductItemOptimized from "@/modules/product/components/product-item-optimized";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,12 +26,12 @@ const SearchContent = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="mb-2 text-2xl font-bold">搜尋結果</h1>
-        <p className="text-gray-600">
+        <p className="text-neutral-600">
           搜尋關鍵字：
           <span className="font-medium"> &quot;{searchQuery}&quot;</span>
         </p>
         {results && (
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-neutral-500">
             找到 {results.total} 個結果
           </p>
         )}
@@ -53,8 +53,8 @@ const SearchContent = () => {
         <div>
           {results.products.length === 0 ? (
             <div className="py-8 text-center">
-              <p className="text-lg text-gray-500">沒有找到相關商品</p>
-              <p className="mt-2 text-gray-400">請嘗試其他關鍵字</p>
+              <p className="text-lg text-neutral-500">沒有找到相關商品</p>
+              <p className="mt-2 text-neutral-400">請嘗試其他關鍵字</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

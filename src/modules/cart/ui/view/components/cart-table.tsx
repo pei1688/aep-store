@@ -86,7 +86,7 @@ const CartTable = ({
               <TableHead>操作</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="">
             {items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
@@ -112,18 +112,12 @@ const CartTable = ({
                         priority
                       />
                     </div>
-                    <h4 className="ae-cart-product-title truncate">
-                      {item.name}
-                    </h4>
+                    <h4 className="ae-card-title truncate">{item.name}</h4>
                   </Link>
                 </TableCell>
                 <TableCell>
                   <div className="min-w-0 flex-1">
-                    {item.variantText && (
-                      <p className="text-sm text-neutral-500">
-                        {item.variantText}
-                      </p>
-                    )}
+                    {item.variantText && <p>{item.variantText}</p>}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -209,11 +203,11 @@ const CartTable = ({
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="ae-cart-product-title mb-1 line-clamp-2 font-medium">
+                    <h4 className="ae-card-title mb-1 line-clamp-2">
                       {item.name}
                     </h4>
                     {item.variantText && (
-                      <p className="mb-2 text-sm text-gray-500">
+                      <p className="mb-2 text-sm text-neutral-500">
                         {item.variantText}
                       </p>
                     )}
@@ -226,12 +220,12 @@ const CartTable = ({
                 {/* 數量控制和總價 */}
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs text-gray-500">數量</span>
+                    <span className="text-xs text-neutral-500">數量</span>
                     <QuantityControls item={item} />
                   </div>
                   <div className="text-right">
-                    <p className="mb-1 text-xs text-gray-500">小計</p>
-                    <p className="text-primary text-lg font-bold">
+                    <p className="ae-caption mb-1">小計</p>
+                    <p className="ae-body">
                       NT${(item.quantity * item.price).toLocaleString()}
                     </p>
                   </div>
@@ -240,7 +234,7 @@ const CartTable = ({
                 {/* 庫存提示 */}
                 {item.quantity >= item.stock && (
                   <div className="mt-2 rounded bg-yellow-50 p-2">
-                    <p className="text-xs text-yellow-700">
+                    <p className="ae-small text-fuchsia-700">
                       已達庫存上限 ({item.stock} 件)
                     </p>
                   </div>

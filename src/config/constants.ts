@@ -1,4 +1,4 @@
-export const NEW_ARRIVALS_COLLECTION_ID = "68270e513421ced09007019a";
+export const NEW_ARRIVALS_COLLECTION_ID = "5e7ed709-58cc-42a2-b302-835fa9b39349";
 
 export const genderOptions = [
   { value: "male", label: "男生" },

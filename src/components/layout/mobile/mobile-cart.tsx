@@ -45,7 +45,10 @@ const MobileCart = () => {
     <Sheet open={open} onOpenChange={setOpen}>
       {/* trigger = 購物車 icon */}
       <SheetTrigger asChild>
-        <Button className="relative bg-transparent shadow-transparent px-3 py-1" size={'none'}>
+        <Button
+          className="relative bg-transparent px-3 py-1 shadow-transparent"
+          size={"none"}
+        >
           <ShoppingCart className="size-5 text-neutral-800" />
           {totalItems > 0 && (
             <span className="absolute -top-0 -right-0 flex size-4 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-fuchsia-50">
@@ -68,12 +71,9 @@ const MobileCart = () => {
             <span className="text-neutral-500">尚未有商品</span>
           </div>
         ) : (
-          <div className="max-h-[70vh] space-y-4 overflow-y-auto pr-2 rounded-lg border">
+          <div className="max-h-[70vh] space-y-4 overflow-y-auto rounded-lg border pr-2">
             {items.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center space-x-3  p-3"
-              >
+              <div key={item.id} className="flex items-center space-x-3 p-3">
                 <Link
                   href={`/product/${item.id.split("_")[0]}`}
                   onClick={() => setOpen(false)}
@@ -91,7 +91,7 @@ const MobileCart = () => {
                   <div className="min-w-0 flex-1">
                     <h4 className="truncate font-medium">{item.name}</h4>
                     {item.variantText && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-neutral-500">
                         {item.variantText}
                       </p>
                     )}

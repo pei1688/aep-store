@@ -3,7 +3,7 @@
 import { getProductFormSearch, searchResult } from "@/action/search/get";
 import { useCallback, useState, useTransition } from "react";
 
-const useSearch = () => {
+export const useSearch = () => {
   const [results, setResults] = useState<searchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -27,4 +27,4 @@ const useSearch = () => {
   return { results, error, isPending, search };
 };
 
-export default useSearch;
+

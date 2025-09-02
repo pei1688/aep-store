@@ -59,7 +59,7 @@ const MobileLinks = ({
             key={item.label}
             href={item.href}
             onClick={closeSheet}
-            className="block rounded-lg p-4 px-12 text-lg transition-colors hover:bg-gray-50"
+            className="block rounded-lg p-4 px-12 text-lg transition-colors hover:bg-neutral-50"
           >
             {item.label}
           </Link>

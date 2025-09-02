@@ -43,7 +43,7 @@ export const FormSelect = ({
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <div className={`flex flex-col gap-4 ${className}`}>
+        <div className={`flex flex-col gap-2 ${className}`}>
           <Label
             htmlFor={name}
             className={

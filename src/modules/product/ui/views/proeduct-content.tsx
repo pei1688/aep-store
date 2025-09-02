@@ -8,7 +8,6 @@ import { getProduct } from "@/action/product";
 import Spinner from "@/components/spinner";
 import { Prisma } from "@prisma/client";
 import { useProductById } from "@/services/products";
-import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export type GetProducts = Prisma.PromiseReturnType<typeof getProduct>;
@@ -18,7 +17,6 @@ interface ProductContentProps {
 }
 
 const ProductContent = ({ productId, initialData }: ProductContentProps) => {
-  const router = useRouter();
   const { product, error, isPending } = useProductById({
     id: productId,
     initialData,
@@ -56,16 +54,16 @@ const ProductContent = ({ productId, initialData }: ProductContentProps) => {
   }
 
   return (
-    <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0">
+    <div className="mx-auto mt-16 max-w-7xl px-6 md:mt-32 md:px-0 space-y-8">
       {/* Product Content */}
       <ProductDetail product={product} />
-      <Separator className="bg-primary/20 my-8" />
+      <Separator className="bg-primary/20" />
       <ProductDescription description={product.description} />
-      <Separator className="bg-primary/20 my-8 md:px-0" />
+      <Separator className="bg-primary/20 md:px-0" />
 
-      {/* Related Products - 性能優化: 延遲載入 */}
+      {/* Related Products  */}
       <div className="flex w-full flex-col items-center">
-        <h2 className="ae-recommendations-title py-12">你可能也喜歡</h2>
+        <h2 className="ae-section-title mb-8">你可能也喜歡</h2>
         <ProductAlsoLike
           categoryId={product.categoryId}
           productId={product.id}

@@ -48,7 +48,7 @@ const NavbarSearch = () => {
       {/* 搜尋按鈕 */}
       <button
         onClick={toggleMobileSearch}
-        className="rounded-md p-2 transition-colors hover:bg-gray-100"
+        className="rounded-md p-2 transition-colors hover:bg-neutral-100"
         aria-label="搜尋"
       >
         <Search className="size-5 text-neutral-800" />
@@ -56,7 +56,7 @@ const NavbarSearch = () => {
 
       {/* Accordion 式搜尋欄 */}
       <div
-        className={`absolute top-16 right-0 left-0 z-50 overflow-hidden border-b border-gray-200 bg-[#FAFAFCCC] shadow-md transition-all duration-300 ease-in-out ${isMobileSearchOpen ? "max-h-20 opacity-100" : "max-h-0 opacity-0"} `}
+        className={`absolute top-16 right-0 left-0 z-50 overflow-hidden border-b border-neutral-200 bg-[#FAFAFCCC] shadow-md transition-all duration-300 ease-in-out ${isMobileSearchOpen ? "max-h-20 opacity-100" : "max-h-0 opacity-0"} `}
       >
         <div className="container mx-auto max-w-7xl px-4">
           <div className="py-4">
@@ -71,19 +71,19 @@ const NavbarSearch = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="搜尋商品..."
-                className="w-full rounded-full border border-gray-300 px-4 py-2 pr-20 text-sm transition-all focus:border-fuchsia-500 focus-visible:ring-transparent"
+                className="w-full rounded-full border border-neutral-300 px-4 py-2 pr-20 text-sm transition-all focus:border-fuchsia-500 focus-visible:ring-transparent"
               />
               <div className="absolute right-3 flex items-center gap-2">
                 <button
                   type="submit"
-                  className="rounded-full bg-transparent p-2 text-neutral-800 transition-colors hover:bg-gray-100"
+                  className="rounded-full bg-transparent p-2 text-neutral-800 transition-colors hover:bg-neutral-100"
                 >
                   <Search className="size-4" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsMobileSearchOpen(false)}
-                  className="rounded-full bg-transparent p-2 text-neutral-800 transition-colors hover:bg-gray-100"
+                  className="rounded-full bg-transparent p-2 text-neutral-800 transition-colors hover:bg-neutral-100"
                 >
                   <X className="size-4" />
                 </button>

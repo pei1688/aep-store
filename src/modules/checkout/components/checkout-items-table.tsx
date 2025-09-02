@@ -59,7 +59,7 @@ export const CheckoutItemsTable = ({
             </TableCell>
             <TableCell>
               {item.variantText && (
-                <p className="text-sm text-gray-500">{item.variantText}</p>
+                <p className="text-sm text-neutral-500">{item.variantText}</p>
               )}
             </TableCell>
             <TableCell>${item.price}</TableCell>
