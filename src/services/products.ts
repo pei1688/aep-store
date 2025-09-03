@@ -79,7 +79,6 @@ interface UseFilteredProductsOptions
   extends Omit<ProductFilterParams, "collectionId"> {
   collectionId: string;
   enabled?: boolean;
-  initialData: any;
 }
 
 export const useFilteredProductsByCollection = ({
@@ -90,7 +89,7 @@ export const useFilteredProductsByCollection = ({
   sortBy,
   page,
   limit,
-  initialData,
+
   enabled = true,
 }: UseFilteredProductsOptions) => {
   const { data, isError, isPending } = useQuery<FilteredProductsResult>({
@@ -104,7 +103,7 @@ export const useFilteredProductsByCollection = ({
       page,
       limit,
     ],
-    initialData,
+
     queryFn: async () => {
       // 優先使用 API 路由以獲得更好的緩存效果
       try {

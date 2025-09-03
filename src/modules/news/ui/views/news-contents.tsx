@@ -22,12 +22,7 @@ const NewsContents: React.FC = () => {
     }, {});
 
   return (
-    <section className="mx-auto max-w-4xl px-6">
-      {/* 標題 */}
-      <h1 className="ae-home-title mb-16 tracking-wide text-neutral-800">
-        公告
-      </h1>
-
+    <section className="mx-auto max-w-4xl px-6 mt-6">
       {/* 公告內容 */}
       <div className="space-y-16">
         {Object.entries(groupedAnnouncements).map(

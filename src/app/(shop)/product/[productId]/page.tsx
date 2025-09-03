@@ -1,7 +1,15 @@
-import { getProduct } from "@/action/product";
+import { getProduct, getProductIds } from "@/action/product";
 import ProductAlsoLike from "@/modules/product/components/prodcut-alsolike";
 import ProductDescription from "@/modules/product/components/product-description";
 import ProductDetail from "@/modules/product/components/product-detail/product-detail";
+
+export const revalidate = 300;
+export async function generateStaticParams() {
+  const product = await getProductIds();
+  return product.map((p) => ({
+    productId: p.id,
+  }));
+}
 
 const ProductPage = async ({
   params,

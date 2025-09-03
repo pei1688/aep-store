@@ -78,3 +78,10 @@ export async function getProductsByCollectionId(collectionId: string) {
     },
   });
 }
+
+//獲取全部商品Id
+export async function getProductIds() {
+  return prisma.product.findMany({
+    select: { id: true },
+  });
+}

@@ -21,7 +21,7 @@ const ProductGrid = ({ products, isPending }: ProductGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 transition-all duration-300 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 transition-all duration-300 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => (
         <ProductItemOptimized product={product} key={product.id} />
       ))}

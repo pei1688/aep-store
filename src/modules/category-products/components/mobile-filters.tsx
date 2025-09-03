@@ -18,7 +18,7 @@ interface MobileFiltersProps {
     brands: string[];
     sortBy: string;
   };
-  lastAvailableFilters: {
+  availableFilters: {
     categories: string[];
     brands: string[];
   };
@@ -35,7 +35,7 @@ interface MobileFiltersProps {
 const MobileFilters = ({
   showMobileFilters,
   filterParams,
-  lastAvailableFilters,
+  availableFilters,
   onClose,
   onClearFilters,
   onFilterChange,
@@ -111,10 +111,10 @@ const MobileFilters = ({
           )}
 
           {/* 分類過濾 */}
-          {lastAvailableFilters.categories.length > 0 && (
+          {availableFilters.categories.length > 0 && (
             <FilterSection
               title="分類"
-              items={lastAvailableFilters.categories}
+              items={availableFilters.categories}
               type="categories"
               selectedItems={filterParams.categories}
               onFilterChange={onFilterChange}
@@ -122,10 +122,10 @@ const MobileFilters = ({
           )}
 
           {/* 品牌過濾 */}
-          {lastAvailableFilters.brands.length > 0 && (
+          {availableFilters.brands.length > 0 && (
             <FilterSection
               title="品牌"
-              items={lastAvailableFilters.brands}
+              items={availableFilters.brands}
               type="brands"
               selectedItems={filterParams.brands}
               onFilterChange={onFilterChange}

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useFilteredProductsByCollection } from "@/services/products";
 import PageHeader from "@/modules/category-products/components/page-header";
@@ -22,27 +22,16 @@ const MobileFilters = dynamic(
 interface CategoryProductsContentProps {
   collectionId: string;
   categorySlug?: string;
-  initialData: any;
 }
 
 const CategoryProductsContent = ({
   collectionId,
   categorySlug,
-  initialData,
 }: CategoryProductsContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-
-  // 保存上一次成功獲取的 availableFilters，避免過濾時消失
-  const lastAvailableFilters = useRef<{
-    categories: string[];
-    brands: string[];
-  }>({ categories: [], brands: [] });
-
-  // 保存上一次成功獲取的商品數據，用於過濾時顯示
-  const lastProducts = useRef<any[]>([]);
 
   // 解析 URL 參數
   const filterParams = useMemo(() => {
@@ -59,26 +48,14 @@ const CategoryProductsContent = ({
   const { data, isPending, isError } = useFilteredProductsByCollection({
     collectionId,
     ...filterParams,
-    initialData,
   });
 
   const {
     products = [],
     totalCount = 0,
     totalPages = 1,
-    collectionInfo,
+    availableFilters = { categories: [], brands: [] },
   } = data || {};
-
-  // 更新 lastAvailableFilters 和 lastProducts，但只在數據成功獲取時
-  if (data?.availableFilters && !isPending) {
-    lastAvailableFilters.current = data.availableFilters;
-  }
-  if (data?.products && !isPending) {
-    lastProducts.current = data.products;
-  }
-
-  // 決定要顯示的商品：過濾時顯示上一次的商品，否則顯示當前商品
-  const displayProducts = isPending ? lastProducts.current : products;
 
   // 更新過濾器
   const updateFilter = (
@@ -142,7 +119,7 @@ const CategoryProductsContent = ({
         {/* 左側過濾欄 - 桌面版 */}
         <DesktopFilters
           filterParams={filterParams}
-          lastAvailableFilters={lastAvailableFilters.current}
+          availableFilters={availableFilters}
           onClearFilters={clearFilters}
           onFilterChange={updateFilter}
           isPending={isPending}
@@ -156,7 +133,7 @@ const CategoryProductsContent = ({
             <LoadingOverlay isVisible={isPending} />
 
             {/* 商品內容 */}
-            <ProductGrid products={displayProducts} isPending={isPending} />
+            <ProductGrid products={products} isPending={isPending} />
           </div>
 
           {/* 分頁組件 */}
@@ -172,7 +149,7 @@ const CategoryProductsContent = ({
       <MobileFilters
         showMobileFilters={showMobileFilters}
         filterParams={filterParams}
-        lastAvailableFilters={lastAvailableFilters.current}
+        availableFilters={availableFilters}
         onClose={() => setShowMobileFilters(false)}
         onClearFilters={clearFilters}
         onFilterChange={updateFilter}

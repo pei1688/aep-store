@@ -8,7 +8,7 @@ interface DesktopFiltersProps {
     categories: string[];
     brands: string[];
   };
-  lastAvailableFilters: {
+  availableFilters: {
     categories: string[];
     brands: string[];
   };
@@ -23,7 +23,7 @@ interface DesktopFiltersProps {
 
 const DesktopFilters = ({
   filterParams,
-  lastAvailableFilters,
+  availableFilters,
   onClearFilters,
   onFilterChange,
   isPending,
@@ -39,7 +39,7 @@ const DesktopFilters = ({
           onClick={onClearFilters}
           className="w-full"
         >
-          <X className="mr-2 size-4 ae-body" />
+          <X className="ae-body mr-2 size-4" />
           清除過濾器
         </Button>
       )}
@@ -47,10 +47,10 @@ const DesktopFilters = ({
       {/* 分類過濾 */}
       {isPending ? (
         <FilterSkeleton />
-      ) : lastAvailableFilters.categories.length > 0 ? (
+      ) : availableFilters.categories.length > 0 ? (
         <FilterSection
           title="分類"
-          items={lastAvailableFilters.categories}
+          items={availableFilters.categories}
           type="categories"
           selectedItems={filterParams.categories}
           onFilterChange={onFilterChange}
@@ -60,10 +60,10 @@ const DesktopFilters = ({
       {/* 品牌過濾 */}
       {isPending ? (
         <FilterSkeleton />
-      ) : lastAvailableFilters.brands.length > 0 ? (
+      ) : availableFilters.brands.length > 0 ? (
         <FilterSection
           title="品牌"
-          items={lastAvailableFilters.brands}
+          items={availableFilters.brands}
           type="brands"
           selectedItems={filterParams.brands}
           onFilterChange={onFilterChange}
