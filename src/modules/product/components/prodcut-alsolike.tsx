@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { useRelatedProducts } from "@/services/products";
 import { RelatedProductProps } from "@/types/product/product";
-import ProductItemOptimized from "./product-item-optimized";
+import ProductItem from "./product-item";
 
 const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
   const { products, error, isPending } = useRelatedProducts({
@@ -38,7 +38,7 @@ const ProductAlsoLike = ({ categoryId, productId }: RelatedProductProps) => {
             key={pd.id}
             className="max-w-xs basis-full sm:basis-1/2 lg:basis-1/3"
           >
-            <ProductItemOptimized product={pd} />
+            <ProductItem product={pd} />
           </CarouselItem>
         ))}
       </CarouselContent>

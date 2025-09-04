@@ -48,11 +48,11 @@ const ProductCounter = ({
   };
 
   return (
-    <div className="ae-des-content my-8 flex flex-col gap-2">
-      <div className="flex items-center gap-4">
-        <h2>數量</h2>
-        <div className="flex items-center gap-4">
-          <div className="flex w-[150px] items-center justify-between rounded-md border border-neutral-700/20 px-2 py-1">
+    <div className="ae-des-content my-8 flex w-full flex-col gap-2">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+        <p>數量:</p>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex w-full items-center justify-between rounded-md border border-neutral-700/20 px-2 py-1">
             <Button
               variant={"ghost"}
               className="rounded-full transition-all hover:bg-fuchsia-500/10"

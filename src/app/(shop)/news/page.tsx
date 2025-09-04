@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const NewsPage = () => {
   return (
-    <div className="px-4 py-8">
+    <div className="px-6 py-8 lg:px-12">
       <div className="flex flex-col items-start gap-4">
         <PageBreadcrumb currentPageName="最新消息" />
         <h1 className="ae-home-title">公告</h1>

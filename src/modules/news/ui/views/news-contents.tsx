@@ -22,12 +22,12 @@ const NewsContents: React.FC = () => {
     }, {});
 
   return (
-    <section className="mx-auto max-w-4xl px-6 mt-6">
+    <section className="mx-auto mt-6 max-w-4xl">
       {/* 公告內容 */}
       <div className="space-y-16">
         {Object.entries(groupedAnnouncements).map(
           ([month, items]: [string, Announcement[]]) => (
-            <div key={month} className="flex gap-12">
+            <div key={month} className="flex flex-col gap-12 lg:flex-row">
               {/* 左側月份顯示 */}
               <div className="w-32 flex-shrink-0">
                 <div className="text-6xl leading-none font-semibold text-neutral-300">

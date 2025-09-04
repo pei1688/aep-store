@@ -21,7 +21,10 @@ export const VariantSelector = ({
     <div className="ae-des-content ae-body mt-10 space-y-4">
       {/* 規格1選擇 */}
       {Object.entries(groupedVariants).map(([specName, variants]) => (
-        <div key={specName} className="flex items-center gap-4">
+        <div
+          key={specName}
+          className="flex flex-col gap-4 lg:flex-row lg:items-center"
+        >
           <p>{specName}:</p>
           <div className="flex flex-wrap items-center gap-4">
             {variants.map((variant) => {
@@ -51,7 +54,10 @@ export const VariantSelector = ({
         if (!variant?.spec2Combinations?.length) return null;
 
         return (
-          <div key={`spec2-${variantId}`} className="flex items-center gap-4">
+          <div
+            key={`spec2-${variantId}`}
+            className="flex flex-col gap-4 lg:flex-row lg:items-center"
+          >
             <p>{variant.spec2Combinations[0]?.spec2Name}:</p>
             <div className="flex flex-wrap items-center gap-4">
               {variant.spec2Combinations.map((spec2) => {

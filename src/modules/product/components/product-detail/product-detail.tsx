@@ -181,7 +181,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
     addItem(cartItem);
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = (): void => {
     if (!validateSelection()) return;
 
     const cartItem = createCartItem();
@@ -195,7 +195,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-8 px-6 pb-20 md:grid-cols-2 md:px-0 md:pb-0 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 px-6 pb-20 md:pb-0 lg:grid-cols-3 lg:px-0">
         <ProductImage
           image={currentImage}
           images={product.imgUrl || [""]}
@@ -233,13 +233,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
           </div>
         </div>
       </div>
-
-      <ActionButtons
-        isDisabled={isDisabled}
-        onAddToCart={handleAddToCart}
-        onBuyNow={handleBuyNow}
-        isMobile
-      />
     </>
   );
 };

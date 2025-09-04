@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getCollectionById } from "@/action/collection";
 import { NEW_ARRIVALS_COLLECTION_ID } from "@/config/constants";
-import ProductItemOptimized from "@/modules/product/components/product-item-optimized";
+import ProductItem from "@/modules/product/components/product-item";
 import { ChevronDown } from "lucide-react";
 
 const ProductList = async () => {
@@ -25,7 +25,7 @@ const ProductList = async () => {
       <span className="ae-home-subTitle">新的代購商品上架囉!</span>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {collection.productCollections.slice(0, 4).map((pc) => (
-          <ProductItemOptimized product={pc.product} key={pc.id} />
+          <ProductItem product={pc.product} key={pc.id} />
         ))}
       </div>
 

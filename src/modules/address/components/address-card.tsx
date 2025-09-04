@@ -50,14 +50,14 @@ const AddressCard = ({ address }: AddressCardProps) => {
         )}
       </div>
 
-      <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        <button
+      <div className="absolute top-2 right-2 flex gap-1">
+        <Button
           onClick={handleEditClick}
-          className="rounded-full bg-white/80 px-3 py-2 shadow-sm transition-colors hover:bg-sky-700/10"
+          className="rounded-full bg-sky-700/10 px-3 py-2 shadow-sm transition-colors hover:bg-sky-700/50"
           title="編輯地址"
         >
           <Edit2 className="size-4 text-sky-700" />
-        </button>
+        </Button>
         {!address.isDefault && (
           <Button
             onClick={handleDeleteClick}
@@ -65,7 +65,7 @@ const AddressCard = ({ address }: AddressCardProps) => {
             title="刪除地址"
             variant={"default"}
           >
-            <Trash2 className="text-white size-4" />
+            <Trash2 className="size-4 text-white" />
           </Button>
         )}
       </div>
