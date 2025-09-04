@@ -56,7 +56,7 @@ const NavbarSearch = () => {
 
       {/* Accordion 式搜尋欄 */}
       <div
-        className={`absolute top-16 right-0 left-0 z-50 overflow-hidden border-b border-neutral-200 bg-[#FAFAFCCC] shadow-md transition-all duration-300 ease-in-out ${isMobileSearchOpen ? "max-h-20 opacity-100" : "max-h-0 opacity-0"} `}
+        className={`absolute top-16 right-0 left-0 z-50 overflow-hidden border-b border-neutral-200 bg-[#fafafc] shadow-md transition-all duration-300 ease-in-out ${isMobileSearchOpen ? "max-h-20 opacity-100" : "max-h-0 opacity-0"} `}
       >
         <div className="container mx-auto max-w-7xl px-4">
           <div className="py-4">

@@ -9,17 +9,15 @@ const HomePage = () => {
   return (
     <div className="flex w-full flex-col space-y-12">
       <Hero />
-
-      <Suspense fallback={"loading..."}>
-        <ProductList />
-      </Suspense>
-
       <Separator className="mx-auto max-w-7xl bg-neutral-500/20" />
-    
       <Suspense fallback={"loading..."}>
         <Collections />
       </Suspense>
-
+      <Separator className="mx-auto max-w-7xl bg-neutral-500/20" />
+      <Suspense fallback={"loading..."}>
+        <ProductList />
+      </Suspense>
+      <Separator className="mx-auto max-w-7xl bg-neutral-500/20" />
       <Brand />
     </div>
   );
