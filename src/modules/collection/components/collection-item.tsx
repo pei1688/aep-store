@@ -13,7 +13,7 @@ const CollectionItem = ({ col }: CollectionItemProps) => {
   return (
     <Link
       href={`/collections/${col.id}/${defaultSlug}`}
-      className="relative block h-full w-full shadow-xl duration-500 hover:scale-102 hover:shadow-2xl"
+      className="relative block aspect-[16/9] lg:h-full w-full shadow-xl duration-500 hover:scale-102 hover:shadow-2xl"
     >
       <Image
         src={col.image || "/default-collection.jpg"}

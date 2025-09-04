@@ -1,10 +1,8 @@
-import Image from "next/image";
-
 const Brand = () => {
   return (
-    <section className="mx-auto my-32 w-full max-w-7xl px-6 md:px-0">
+    <section className="mx-auto mt-6 mb-32 w-full max-w-7xl px-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row">
-        <div className="flex w-full space-y-8">
+        <div className="flex w-full flex-col space-y-6 md:flex-row">
           <h1 className="ae-home-title flex-1 text-center">BRAND STORY</h1>
           <p className="ae-capton flex-1">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil

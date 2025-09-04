@@ -10,7 +10,7 @@ const ProductList = async () => {
   if (!collection) return null;
 
   return (
-    <section className="mx-auto flex w-full max-w-7xl flex-col space-y-3 px-6">
+    <section className="mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6">
       <div className="flex items-center justify-between">
         <h3 className="ae-home-title text-center">新品上市</h3>
       </div>
@@ -21,11 +21,7 @@ const ProductList = async () => {
         ))}
       </div>
 
-      <Button
-        variant="outline"
-        asChild
-        className="mt-3 block h-[100px] text-2xl"
-      >
+      <Button variant="outline" asChild className="block h-[100px] text-2xl ">
         <Link href={`/collections`} className="flex items-center">
           <p>View more</p>
           <ChevronDown className="size-12 text-neutral-500" />
