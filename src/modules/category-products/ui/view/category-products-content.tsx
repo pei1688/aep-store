@@ -5,7 +5,6 @@ import { useFilteredProductsByCollection } from "@/services/products";
 import PageHeader from "@/modules/category-products/components/page-header";
 import Toolbar from "@/modules/category-products/components/toolbar";
 import ProductGrid from "@/modules/category-products/components/product-grid";
-import LoadingOverlay from "@/modules/category-products/components/loading-overlay";
 import ProductPagination from "@/modules/category-products/components/product-pagination";
 import dynamic from "next/dynamic";
 import {
@@ -127,15 +126,8 @@ const CategoryProductsContent = ({
 
         {/* 右側商品區域 */}
         <div className="flex-1">
-          {/* 商品網格 */}
-          <div className="relative">
-            {/* 過濾時的遮罩層 */}
-            <LoadingOverlay isVisible={isPending} />
-
-            {/* 商品內容 */}
-            <ProductGrid products={products} isPending={isPending} />
-          </div>
-
+          {/* 商品內容 */}
+          <ProductGrid products={products} isPending={isPending} />
           {/* 分頁組件 */}
           <ProductPagination
             currentPage={filterParams.page}

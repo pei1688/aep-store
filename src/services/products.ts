@@ -105,38 +105,15 @@ export const useFilteredProductsByCollection = ({
     ],
 
     queryFn: async () => {
-      // 優先使用 API 路由以獲得更好的緩存效果
-      try {
-        const params = new URLSearchParams({
-          collectionId,
-          ...(categorySlug && { categorySlug }),
-          ...(categories?.length && { categories: categories.join(",") }),
-          ...(brands?.length && { brands: brands.join(",") }),
-          ...(sortBy && { sortBy }),
-          ...(page && { page: page.toString() }),
-          ...(limit && { limit: limit.toString() }),
-        });
-
-        const response = await fetch(`/api/products/filtered?${params}`);
-
-        if (!response.ok) {
-          throw new Error(`API request failed: ${response.status}`);
-        }
-
-        return await response.json();
-      } catch (error) {
-        console.warn("API 路由失敗，回退到直接調用:", error);
-        // 回退到直接調用 server action
-        return getFilteredProductsByCollection({
-          collectionId,
-          categorySlug,
-          categories,
-          brands,
-          sortBy,
-          page,
-          limit,
-        });
-      }
+      return await getFilteredProductsByCollection({
+        collectionId,
+        categorySlug,
+        categories,
+        brands,
+        sortBy,
+        page,
+        limit,
+      });
     },
     enabled: enabled && !!collectionId,
     staleTime: 1000 * 60 * 5, // 5分鐘緩存
