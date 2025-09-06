@@ -21,8 +21,11 @@ const ProductList = async () => {
         ))}
       </div>
 
-      <Button variant="outline" asChild className="block h-[100px] text-2xl ">
-        <Link href={`/collections`} className="flex items-center">
+      <Button variant="outline" asChild className="block h-[100px] text-2xl">
+        <Link
+          href={`/collections/${NEW_ARRIVALS_COLLECTION_ID}/全部`}
+          className="flex items-center"
+        >
           <p>View more</p>
           <ChevronDown className="size-12 text-neutral-500" />
         </Link>

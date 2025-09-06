@@ -8,4 +8,5 @@ const Spinner = () => {
   );
 };
 
+export { Spinner };
 export default Spinner;

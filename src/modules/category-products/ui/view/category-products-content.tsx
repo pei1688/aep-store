@@ -1,11 +1,11 @@
 "use client";
 import { useState, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useFilteredProductsByCollection } from "@/services/products";
+import { useInfiniteFilteredProductsByCollection } from "@/services/products";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import PageHeader from "@/modules/category-products/components/page-header";
 import Toolbar from "@/modules/category-products/components/toolbar";
 import ProductGrid from "@/modules/category-products/components/product-grid";
-import ProductPagination from "@/modules/category-products/components/product-pagination";
 import dynamic from "next/dynamic";
 import {
   buildClearedFilters,
@@ -13,6 +13,7 @@ import {
   buildUpdatedSort,
 } from "@/lib/filter";
 import DesktopFilters from "../../components/desktop-filters";
+import { Spinner } from "@/components/spinner";
 
 const MobileFilters = dynamic(
   () => import("@/modules/category-products/components/mobile-filters"),
@@ -38,23 +39,31 @@ const CategoryProductsContent = ({
       searchParams.get("categories")?.split(",").filter(Boolean) || [];
     const brands = searchParams.get("brands")?.split(",").filter(Boolean) || [];
     const sortBy = searchParams.get("sortBy") || "newest";
-    const page = parseInt(searchParams.get("page") || "1", 10);
 
-    return { categorySlug, categories, brands, sortBy, page, limit: 5 };
+    return { categorySlug, categories, brands, sortBy, limit: 8 };
   }, [searchParams, categorySlug]);
 
-  // 獲取過濾後的產品數據
-  const { data, isPending, isError } = useFilteredProductsByCollection({
+  // 獲取無限滾動的產品數據
+  const {
+    products,
+    totalCount,
+    availableFilters,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteFilteredProductsByCollection({
     collectionId,
     ...filterParams,
   });
 
-  const {
-    products = [],
-    totalCount = 0,
-    totalPages = 1,
-    availableFilters = { categories: [], brands: [] },
-  } = data || {};
+  // 設置無限滾動
+  const { loadMoreRef } = useInfiniteScroll({
+    hasNextPage: hasNextPage ?? false,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
 
   // 更新過濾器
   const updateFilter = (
@@ -78,13 +87,6 @@ const CategoryProductsContent = ({
     router.push(`${pathname}${query ? `?${query}` : ""}`);
   };
 
-  // 頁面變更處理
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", page.toString());
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
   if (isError) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -100,7 +102,7 @@ const CategoryProductsContent = ({
         <PageHeader
           categorySlug={categorySlug}
           totalCount={totalCount}
-          isPending={isPending}
+          isPending={isLoading}
           activeFilters={{
             categories: filterParams.categories,
             brands: filterParams.brands,
@@ -121,19 +123,22 @@ const CategoryProductsContent = ({
           availableFilters={availableFilters}
           onClearFilters={clearFilters}
           onFilterChange={updateFilter}
-          isPending={isPending}
+          isPending={isLoading}
         />
 
         {/* 右側商品區域 */}
         <div className="flex-1">
           {/* 商品內容 */}
-          <ProductGrid products={products} isPending={isPending} />
-          {/* 分頁組件 */}
-          <ProductPagination
-            currentPage={filterParams.page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <ProductGrid products={products} isPending={isLoading} />
+
+          {/* 無限滾動觸發器 */}
+          <div ref={loadMoreRef} className="flex justify-center py-8">
+            {isFetchingNextPage && (
+              <div className="flex items-center gap-2">
+                <Spinner />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -146,6 +151,7 @@ const CategoryProductsContent = ({
         onClearFilters={clearFilters}
         onFilterChange={updateFilter}
         onSortChange={updateSort}
+        isPending={isLoading}
       />
     </>
   );

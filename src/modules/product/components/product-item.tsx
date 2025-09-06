@@ -29,7 +29,6 @@ const ProductItem = memo(({ product, priority = false }: ProductItemProps) => {
   );
   return (
     <div
-      key={product.id}
       className="relative aspect-[3/4] w-full rounded-sm border bg-neutral-100 transition-all duration-300 hover:border-fuchsia-500 hover:shadow-lg"
     >
       {/* Sale badge */}
