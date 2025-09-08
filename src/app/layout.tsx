@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import Footer from "@/components/layout/footer";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import Template from "./template";
+import SplashScreen from "@/components/layout/splash-screen";
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="zh-Hant">
       <body className="flex min-h-screen flex-col antialiased">
         <ReactQueryProvider>
+          <SplashScreen />
           <Toaster position="bottom-right" richColors />
           <Navbar />
           <Template>{children}</Template>

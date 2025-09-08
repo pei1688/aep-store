@@ -14,6 +14,7 @@ interface ProductDetailState {
   setQuantity: (quantity: number) => void;
   setCurrentProductId: (productId: string) => void; // 新增：設置當前商品ID
   resetState: (defaultImage: string) => void;
+  initializeWithDefaults: (defaultImage: string, defaultVariants: Record<string, string>, defaultSpec2: Record<string, string>) => void;
 }
 
 export const useProductDetailStore = create<ProductDetailState>((set) => ({
@@ -35,5 +36,12 @@ export const useProductDetailStore = create<ProductDetailState>((set) => ({
       selectedSpec2: {},
       quantity: 1,
       currentProductId: null, // 重置時清除商品ID
+    }),
+  initializeWithDefaults: (defaultImage, defaultVariants, defaultSpec2) =>
+    set({
+      currentImage: defaultImage,
+      selectedVariants: defaultVariants,
+      selectedSpec2: defaultSpec2,
+      quantity: 1,
     }),
 }));
