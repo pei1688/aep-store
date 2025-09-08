@@ -41,7 +41,7 @@ const MobileSaleProducts = ({
         <SheetDescription className="px-8">選擇特價商品的分類</SheetDescription>
       </SheetHeader>
 
-      <div className="mt-6 space-y-2">
+      <div className="mt-6 space-y-6">
         {/* 顯示全部選項 */}
         <Link
           href={`/collections/${collections.find((col) => col.name === "特價商品")?.id}/全部`}

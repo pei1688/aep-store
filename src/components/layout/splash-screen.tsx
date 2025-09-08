@@ -1,17 +1,39 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 export default function SplashScreen() {
+  const [shouldShow, setShouldShow] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const splashRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLHeadingElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
+  useEffect(() => {
+    // 檢查是否為第一次訪問
+    const hasVisited = sessionStorage.getItem("hasVisitedAEpStore");
+
+    if (!hasVisited) {
+      setShouldShow(true);
+      // 標記已經訪問過
+      sessionStorage.setItem("hasVisitedAEpStore", "true");
+    } else {
+      // 如果已經訪問過，直接設為完成狀態
+      setIsDone(true);
+    }
+  }, []);
+
   useGSAP(() => {
-    if (!splashRef.current || !logoRef.current || !svgRef.current) return;
+    // 只有在應該顯示且元素存在時才執行動畫
+    if (
+      !shouldShow ||
+      !splashRef.current ||
+      !logoRef.current ||
+      !svgRef.current
+    )
+      return;
 
     const ctx = gsap.context(() => {
       // Prepare text
@@ -107,9 +129,10 @@ export default function SplashScreen() {
     }, splashRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [shouldShow]);
 
-  if (isDone) return null;
+  // 如果已完成或不應該顯示，返回 null
+  if (isDone || !shouldShow) return null;
 
   return (
     <div
@@ -128,7 +151,6 @@ export default function SplashScreen() {
         className="iconify iconify--twemoji"
         preserveAspectRatio="xMidYMid meet"
       >
-        
         <g id="SVGRepo_iconCarrier">
           <path
             className="purple-path"

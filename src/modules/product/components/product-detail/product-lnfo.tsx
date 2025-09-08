@@ -17,7 +17,7 @@ export const ProductInfo = ({ product, priceInfo }: ProductInfoProps) => {
         {priceInfo.hasDiscount ? (
           <>
             {/* 價格組合 */}
-            <div className="ae-caption flex items-center space-x-3">
+            <div className="ae-sub-section-title flex items-center space-x-3">
               {/* 特價價格 */}
               <span className="font-bold text-fuchsia-600">
                 NT${priceInfo.discountedPrice.toLocaleString()}
@@ -36,7 +36,7 @@ export const ProductInfo = ({ product, priceInfo }: ProductInfoProps) => {
           </>
         ) : (
           /* 一般價格 */
-          <div className="font-bold">
+          <div className="ae-sub-section-title">
             NT${priceInfo.finalPrice.toLocaleString()}
           </div>
         )}

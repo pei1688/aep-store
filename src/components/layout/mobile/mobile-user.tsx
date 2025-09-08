@@ -42,7 +42,7 @@ const MobileUser = ({ session, closeSheet, authClient }: MobileUserProps) => {
             onClick={closeSheet}
             className="flex items-center gap-3 rounded-lg px-12 py-4 transition-colors hover:bg-neutral-50"
           >
-            <item.icon className="size-4 text-neutral-600" />
+            <item.icon className="size-4" />
             <span className="text-lg">{item.label}</span>
           </Link>
         ))}
@@ -51,10 +51,12 @@ const MobileUser = ({ session, closeSheet, authClient }: MobileUserProps) => {
           variant="ghost"
           onClick={handleSignOut}
           size={"sheet"}
-          className="h-auto w-full justify-start gap-3"
+          className="w-full justify-start gap-3"
         >
           <LogOut className="size-4" />
-          <span className="text-lg">{session ? "登出" : "登入"}</span>
+          <span className="text-lg font-normal">
+            {session ? "登出" : "登入"}
+          </span>
         </Button>
       </div>
     </div>

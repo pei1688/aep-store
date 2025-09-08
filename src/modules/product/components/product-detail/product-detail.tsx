@@ -56,14 +56,17 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
       if (variants.length > 0) {
         const firstVariant = variants[0];
         defaultVariants[specName] = firstVariant.id;
-        
+
         // 如果第一個變體有圖片，使用它作為預設圖片
         if (firstVariant.spec1Image) {
           defaultImage = firstVariant.spec1Image;
         }
-        
+
         // 如果第一個變體有規格2，選擇第一個規格2
-        if (firstVariant.spec2Combinations && firstVariant.spec2Combinations.length > 0) {
+        if (
+          firstVariant.spec2Combinations &&
+          firstVariant.spec2Combinations.length > 0
+        ) {
           defaultSpec2[firstVariant.id] = firstVariant.spec2Combinations[0].id;
         }
       }
@@ -76,7 +79,8 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   useEffect(() => {
     if (currentProductId !== product.id) {
       // 商品變化，初始化預設選擇
-      const { defaultVariants, defaultSpec2, defaultImage } = generateDefaultSelections();
+      const { defaultVariants, defaultSpec2, defaultImage } =
+        generateDefaultSelections();
       initializeWithDefaults(defaultImage, defaultVariants, defaultSpec2);
       setCurrentProductId(product.id);
     } else if (!currentImage && product.imgUrl[0]) {
@@ -208,7 +212,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-8 px-6 pb-20 md:pb-0 lg:grid-cols-3 lg:px-0">
+      <div className="grid grid-cols-1 gap-8 px-0 pb-20 sm:px-4 md:pb-0 lg:grid-cols-3 lg:px-0">
         <ProductImage
           image={currentImage}
           images={product.imgUrl || [""]}
@@ -216,7 +220,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
           onImageChange={setCurrentImage}
         />
 
-        <div className="col-span-1 flex w-full flex-col">
+        <div className="col-span-2 sm:col-span-1 flex w-full flex-col">
           <ProductInfo product={product} priceInfo={priceInfo} />
 
           <VariantSelector

@@ -21,7 +21,7 @@ interface ProductDesProps {
 
 const ProductDescription = ({ description }: ProductDesProps) => {
   return (
-    <div className="mb-32 flex flex-col px-6 md:px-0">
+    <div className="mb-32 flex flex-col px-0 sm:px-4">
       <div className="ae-section-title mb-8">商品資訊</div>
       {/*商品描述*/}
       <div className="ae-body [&_.ql-container]:!border-none [&_.ql-editor]:!p-0 [&_.ql-toolbar]:hidden">

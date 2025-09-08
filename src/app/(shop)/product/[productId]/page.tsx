@@ -1,4 +1,5 @@
 import { getProduct, getProductIds } from "@/action/product";
+import { Separator } from "@/components/ui/separator";
 import ProductAlsoLike from "@/modules/product/components/prodcut-alsolike";
 import ProductDescription from "@/modules/product/components/product-description";
 import ProductDetail from "@/modules/product/components/product-detail/product-detail";
@@ -30,7 +31,7 @@ const ProductPage = async ({
     <div className="mx-auto mt-16 max-w-7xl space-y-8 px-6 md:mt-32 md:px-0">
       {/* Product Content */}
       <ProductDetail product={product} />
-      <div className="bg-primary/20 h-px w-full" />
+      <Separator className="bg-primary/20 my-8" />
       <ProductDescription description={product.description} />
       <div className="bg-primary/20 h-px w-full" />
       <div className="flex w-full flex-col items-center">

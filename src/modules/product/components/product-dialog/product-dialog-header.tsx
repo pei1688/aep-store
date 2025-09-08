@@ -26,7 +26,7 @@ export const ProductDialogHeader = ({
       <DialogHeader>
         <DialogTitle className="ae-home-title">{name}</DialogTitle>
       </DialogHeader>
-      <div className="ae-caption mt-2 flex items-center gap-2">
+      <div className="ae-sub-section-title mt-3 flex items-center justify-start gap-2">
         {discountInfo.hasDiscount ? (
           <>
             <p className="font-bold text-fuchsia-600">
