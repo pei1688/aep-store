@@ -8,7 +8,7 @@ const Navbar = async () => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/40 shadow-sm backdrop-blur-lg supports-[backdrop-filter]:bg-white/40">
-      <nav className="container mx-auto max-w-7xl px-4 lg:px-0">
+      <nav className="container mx-auto max-w-7xl px-4 lg:px-5">
         <div className="flex h-16 items-center">
           {/* Logo*/}
           <Link
