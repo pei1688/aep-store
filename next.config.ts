@@ -7,7 +7,6 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     domains: ["vnhm1ui6mh.ufs.sh", "utfs.io", "res.cloudinary.com"],
     formats: ['image/webp', 'image/avif'],
