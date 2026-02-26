@@ -168,9 +168,9 @@ export default function SplashScreen() {
       </svg>
       <h1
         ref={logoRef}
-        className="text-5xl font-extrabold tracking-wide text-neutral-800 opacity-0"
+        className="text-5xl font-bold text-neutral-800 opacity-0"
       >
-        AEp Store
+        AEp-Store
       </h1>
     </div>
   );

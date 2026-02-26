@@ -54,9 +54,6 @@
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
 
-  /* =========================
-   * 1. Heading 標題階層
-   * ========================= */
 
   /* H1 主標題 (Hero / 主頁大標) */
   --h1-size: 28px; /* 2rem */
@@ -215,7 +212,6 @@
 
 @layer base {
   html {
-    /* Apple San Francisco 字型 */
     font-family:
       -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
       sans-serif;
@@ -229,10 +225,9 @@
     @apply bg-neutral-100;
   }
 
-  /*0.24 -> 內容敘述，0.8->最大標題 ， 0.32 副標等*/
+  /*0.24 -> 內容敘述，0.8->最大標題 ， 0.32 副標*/
 
   /* product */
-  /* 商品圖片 */
   .product-gallery {
     margin: 0 auto;
     max-width: 35.729rem;
@@ -269,7 +264,7 @@
     letter-spacing: var(--h4-letter-spacing);
   }
 
-  /* Body 內文 */
+  /* Body*/
   .ae-body {
     font-size: var(--body-size);
     font-weight: var(--body-weight);

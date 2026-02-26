@@ -7,29 +7,23 @@ const Navbar = async () => {
   const collections = await getCollectionsWithCategory();
 
   return (
-    <header className="z-50 flex w-full items-center justify-between bg-[#FAFAFCCC] shadow-sm">
-      <div className="container mx-auto max-w-7xl px-4 lg:px-0">
+    <header className="sticky top-0 z-50 w-full bg-white/40 shadow-sm backdrop-blur-lg supports-[backdrop-filter]:bg-white/40">
+      <nav className="container mx-auto max-w-7xl px-4 lg:px-0">
         <div className="flex h-16 items-center">
-          {/* Logo - 左邊 */}
+          {/* Logo*/}
           <Link
             href={"/"}
-            className="flex flex-shrink-0 cursor-pointer items-center gap-4"
+            className="flex flex-shrink-0 cursor-pointer items-center gap-3"
           >
-            <Image
-              src={"/logo.png"}
-              alt="茄蘋帝國Logo"
-              width={30}
-              height={30}
-            />
-            <p className="ae-section-title hidden md:flex">AEp Store</p>
+            <Image src={"/logo.png"} alt="OeaLogo" width={24} height={24} />
+            <p className="ae-section-title hidden md:flex">Oea</p>
           </Link>
 
-          {/* 導航功能 - 佔據剩餘空間 */}
           <div className="flex-1">
             <NavLinks collections={collections} />
           </div>
         </div>
-      </div>
+      </nav>
     </header>
   );
 };

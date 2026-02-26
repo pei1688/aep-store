@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import ProductSkeleton from "@/modules/category-products/ui/product-skeleton";
 import CategoryProductsContent from "@/modules/category-products/ui/view/category-products-content";
 import { Suspense } from "react";
-// ISR：每 5 分鐘重新生成一次
 export const revalidate = 300;
 
 export async function generateStaticParams() {
